@@ -1,0 +1,53 @@
+.el-date-editor.el-input, .el-date-editor.el-input__wrapper{width: 200px;}
+.customer-edit-con {
+    .el-input,.el-select,.el-date-editor.el-input, .el-date-editor.el-input__wrapper{width: 200px;}
+    .form-content {
+        padding: 20px 0;
+
+        .row {
+            display: flex;
+            align-items: baseline;
+            min-width: 430px;
+            span {
+                font-size: 12px;
+                margin-left: 12px;
+                color: #8D98B0;
+            }
+            .sfz-img{width: 240px;height: 154px;margin-right: 15px;}
+        }
+
+        :deep(.el-form-item__label) {
+            font-size: 14px;
+            color: #2B2D30;
+            font-weight: normal;
+        }
+        .row-mar{margin-top: 20px;}
+        .btns{display: flex;justify-content: center;}
+    }
+
+    .step {
+        margin: 28px auto 8px auto;
+        width: 800px
+    }
+
+    :deep(.is-finish .is-text) {
+        background: #3787FF;
+        color: #fff;
+    }
+
+    :deep(.is-text) {
+        background: transparent;
+        color: #8D98B0;
+    }
+
+    :deep(.el-step.is-center .el-step__line) {
+        left: 62%;
+        right: -38%;
+    }
+
+    :deep(.el-step__title) {
+        font-weight: 500;
+        font-size: 15px;
+        // color: #2B2D30;
+    }
+}
