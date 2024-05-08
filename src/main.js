@@ -43,7 +43,12 @@ import ImagePreview from "@/components/ImagePreview"
 import TreeSelect from '@/components/TreeSelect'
 // 字典标签组件
 import DictTag from '@/components/DictTag'
-
+//导出弹框
+import ExportDialog from '@/components/exportDialog';
+//上级审核人
+import SuperiorDialog from '@/components/SuperiorDialog';
+//审核密码
+import ManagerPwdDialog from '@/components/ManagerPwdDialog';
 const app = createApp(App)
 
 // 全局方法挂载
@@ -65,6 +70,9 @@ app.component('ImageUpload', ImageUpload)
 app.component('ImagePreview', ImagePreview)
 app.component('RightToolbar', RightToolbar)
 app.component('Editor', Editor)
+app.component('ExportDialog', ExportDialog)
+app.component('SuperiorDialog', SuperiorDialog)
+app.component('ManagerPwdDialog', ManagerPwdDialog)
 
 app.use(router)
 app.use(store)

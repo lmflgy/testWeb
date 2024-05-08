@@ -47,7 +47,7 @@ const exportTime = ref([])
 
 //方法
 const close = ()=>{
-    emits('close', false)
+    emits('closes', false)
 }
 </script>
 <style lang="scss" scoped>

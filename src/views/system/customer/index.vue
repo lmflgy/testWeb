@@ -71,7 +71,7 @@
                         <div class="table-caozuo">
                             <span @click="handleMeg(scope.row,1)">详情</span>
                             <span @click="handleMeg(scope.row,2)">修改</span>
-                            <span @click="handleDel">删除</span>
+                            <span @click="handleDel(scope.row)">删除</span>
                         </div>
                     </template>
                 </el-table-column>
@@ -80,7 +80,11 @@
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
         <!-- 导出 -->
-        <exportDialog :dialogVisible="exportDialogVisible" @close="handleExport"></exportDialog>
+        <exportDialog :dialogVisible="exportDialogVisible" @closes="handleExport"></exportDialog>
+        <!-- 上级审核人 -->
+        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" :title="titleDialog" ></SuperiorDialog>
+        <!-- 审核密码 -->
+        <ManagerPwdDialog :dialogVisible="managerPwdDialogVisible" @closes="handleManagerPwd"></ManagerPwdDialog>
     </div>
 </template>
 <script setup name="Customer">
@@ -91,18 +95,18 @@ const {
     proxy
 } = getCurrentInstance();
 const router = useRouter();
-import exportDialog from './dialog/export.vue';
 import {
     dictQuery,
     dictTable
 } from './data/index.js'
-import {getUserList  } from "@/api/system/customer";
+import {getUserList,deleteUser  } from "@/api/system/customer";
 import { ref } from 'vue';
 
-const { sys_authentication } = proxy.useDict("sys_authentication");
+const { police_status,user_type } = proxy.useDict("police_status","user_type");
 //页面中用到的字典数据
 const dictData = ref({
-    sys_authentication: sys_authentication
+    police_status: police_status,
+    user_type:user_type
 })
 //查询表单
 const queryParams = ref({
@@ -110,22 +114,37 @@ const queryParams = ref({
     pageSize: 10
 });
 //数据列表
-const tableData = ref([{}]);
-const total = ref(10);
-//弹框
-const exportDialogVisible = ref(false)
+const tableData = ref([]);
+const total = ref(0);
+//弹框标题
+const titleDialog = ref('');
+//当前选中的数据
+const rowSelect = ref({})
+//操作步骤 1==删除 2==导出
+const typeSelect = ref(0)
+//审核人
+const superiorName = ref('')
 
+//导出弹框
+const exportDialogVisible = ref(false)
+//上级审核弹框
+const superiorDialogVisible = ref(false)
+//输入密码弹框
+const managerPwdDialogVisible = ref(false)
 
 
 //查询 列表数据
 const getList = () => {
    getUserList(queryParams.value).then((res)=>{
-
+    tableData.value = res.rows
+    total.value = res.total
     })
 }
 //点击 查询 按钮
 const handleQuery = () => {
-
+    queryParams.value.pageNum = 1
+    queryParams.value.pageSize = 10
+    getList()
 }
 //点击 重置 按钮
 const resetQuery = () => {
@@ -141,12 +160,17 @@ const resetQuery = () => {
     });
     handleQuery();
 }
-//点击 删除 按钮
-const handleDel = () => {
-    proxy.$modal
-        .confirm('确认删除?')
-        .then(function () {
 
+//点击 删除 按钮
+const handleDel =  (row)=>{
+    proxy.$modal
+        .confirm('删除需要管理员进行审核，是否确认申请删除?')
+        .then( function () {
+           
+            titleDialog.value = '删除'
+            typeSelect.value = 1
+            rowSelect.value = row
+            superiorDialogVisible.value = true
         })
         .catch(() => { });
 }
@@ -163,6 +187,23 @@ const handleMeg = (row,type) => {
 //点击 导出
 const handleExport = (boo)=>{
     exportDialogVisible.value = boo
+}
+//选择上级完成
+const handleSuperior = (boo,userId)=>{
+    superiorName.value =userId
+    superiorDialogVisible.value = false
+    managerPwdDialogVisible.value = true
+
+}
+//密码输入完成
+const handleManagerPwd = (boo,pwd)=>{
+    managerPwdDialogVisible.value = false
+    //删除
+    if(typeSelect.value == 1) delSubmit(pwd)
+}
+const delSubmit = async (pwd)=>{
+      const res = await deleteUser({auditPassword:pwd,leaderName:superiorName.value,id:rowSelect.value.id})
+      if(res.code == 0) getList()
 }
 getList()
 </script>

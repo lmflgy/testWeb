@@ -8,7 +8,14 @@ export function getUserList(query) {
     params: query
   })
 }
-
+// 删除客户
+export function deleteUser(query) {
+  return request({
+    url: '/zuser/delete',
+    method: 'get',
+    params: query
+  })
+}
 // 新增部门
 export function addDept(data) {
   return request({
