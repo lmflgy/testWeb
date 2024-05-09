@@ -83,8 +83,7 @@
             <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNo"
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
-        <!-- 导出 -->
-        <exportDialog :dialogVisible="exportDialogVisible" @close="handleExport"></exportDialog>
+       
     </div>
 </template>
 <script setup name="BlackList">
@@ -94,8 +93,8 @@ import {
 const {
     proxy
 } = getCurrentInstance();
+import { getBlackUserList} from "@/api/system/customer";
 const router = useRouter();
-import exportDialog from './dialog/export.vue';
 import {
     backListQuery,
     backListTable
@@ -113,8 +112,8 @@ const queryParams = ref({
     pageSize: 10
 });
 //数据列表
-const tableData = ref([{}]);
-const total = ref(10);
+const tableData = ref([]);
+const total = ref(0);
 //弹框
 const exportDialogVisible = ref(false)
 
@@ -122,11 +121,17 @@ const exportDialogVisible = ref(false)
 
 //查询 列表数据
 const getList = () => {
-
+    
+    getBlackUserList(queryParams.value).then((res) => {
+        tableData.value = res.rows
+        total.value = res.total
+    })
 }
 //点击 查询 按钮
 const handleQuery = () => {
-
+    queryParams.value.pageNum = 1
+    queryParams.value.pageSize = 10
+    getList()
 }
 //点击 重置 按钮
 const resetQuery = () => {
@@ -165,5 +170,6 @@ const handleMeg = (row,type) => {
 const handleExport = (boo)=>{
     exportDialogVisible.value = boo
 }
+// getList()
 </script>
 <style lang="scss" scoped></style>

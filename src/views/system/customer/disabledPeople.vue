@@ -53,7 +53,7 @@
             fontWeight: publicConfigStore.tableHeaderBold,
             fontSize: publicConfigStore.tableHeaderFont
         }">
-                <el-table-column type="index" width="55" label="序号" :width="publicConfigStore.tableIndexWidth" />
+                <el-table-column type="index" label="序号" :width="publicConfigStore.tableIndexWidth" />
                 <el-table-column v-for="(item, index) in disabledPeopleTable" :key="index" :label="item.name"
                     :show-overflow-tooltip="true" :prop="item.prop" :align="publicConfigStore.tableAlign"
                     :min-width="item.width">
@@ -64,27 +64,17 @@
                         <span v-if="item.type == 'select'">
                             <dict-tag :options="dictData[item.dict]" :value="scope.row[item.prop]" />
                         </span>
-
+                        <span v-if="item.type == 'look'" class="blue cur">
+                           查看
+                        </span>
                     </template>
                 </el-table-column>
-
-                <el-table-column label="操作" :align="publicConfigStore.tableAlign" class-name="small-padding fixed-width"
-                    fixed="right" width="180px">
-                    <template #default="scope">
-
-                        <div class="table-caozuo">
-                            <span @click="handleMeg(scope.row, 1)">详情</span>
-                            <span @click="handleMeg(scope.row, 2)">修改</span>
-                            <span @click="handleDel">删除</span>
-                        </div>
-                    </template>
-                </el-table-column>
+               
             </el-table>
             <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNo"
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
-        <!-- 导出 -->
-        <exportDialog :dialogVisible="exportDialogVisible" @close="handleExport"></exportDialog>
+      
     </div>
 </template>
 <script setup name="DisabledPeople">
@@ -95,17 +85,19 @@ const {
     proxy
 } = getCurrentInstance();
 const router = useRouter();
-import exportDialog from './dialog/export.vue';
+import { getDisUserList} from "@/api/system/customer";
 import {
     disabledPeopleQuery,
     disabledPeopleTable
 } from './data/index.js'
 import { ref } from 'vue';
 
-const { sys_authentication } = proxy.useDict("sys_authentication");
+const { dis_status,cert_type,dis_user_type } = proxy.useDict("dis_status","cert_type","dis_user_type");
 //页面中用到的字典数据
 const dictData = ref({
-    sys_authentication: sys_authentication
+    dis_status: dis_status,
+    cert_type:cert_type,
+    dis_user_type:dis_user_type
 })
 //查询表单
 const queryParams = ref({
@@ -113,8 +105,8 @@ const queryParams = ref({
     pageSize: 10
 });
 //数据列表
-const tableData = ref([{}]);
-const total = ref(10);
+const tableData = ref([]);
+const total = ref(0);
 //弹框
 const exportDialogVisible = ref(false)
 
@@ -122,11 +114,16 @@ const exportDialogVisible = ref(false)
 
 //查询 列表数据
 const getList = () => {
-
+    getDisUserList(queryParams.value).then((res) => {
+        tableData.value = res.rows
+        total.value = res.total
+    })
 }
 //点击 查询 按钮
 const handleQuery = () => {
-
+    queryParams.value.pageNum = 1
+    queryParams.value.pageSize = 10
+    getList()
 }
 //点击 重置 按钮
 const resetQuery = () => {
@@ -175,5 +172,6 @@ const handleMeg = (row, type) => {
 const handleExport = (boo) => {
     exportDialogVisible.value = boo
 }
+getList()
 </script>
 <style lang="scss" scoped></style>

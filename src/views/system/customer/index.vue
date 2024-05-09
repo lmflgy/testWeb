@@ -40,7 +40,7 @@
         <el-card :shadow="publicConfigStore.cardShadow">
             <div class="table-total">
                 <div>共 <span class="count">{{ total }}</span> 条数据</div>
-                <el-button  type="primary" class="export" @click="handleExport(true)">导出</el-button>
+                <el-button type="primary" class="export" @click="handleExport(true)">导出</el-button>
             </div>
             <el-table :data="tableData" border style="width: 100%" :stripe="publicConfigStore.tableStripe"
                 :align="publicConfigStore.tableAlign" :header-cell-style="{
@@ -49,7 +49,7 @@
             fontWeight: publicConfigStore.tableHeaderBold,
             fontSize: publicConfigStore.tableHeaderFont
         }">
-                <el-table-column type="index" width="55" label="序号" :width="publicConfigStore.tableIndexWidth" />
+                <el-table-column type="index" label="序号" :width="publicConfigStore.tableIndexWidth" />
                 <el-table-column v-for="(item, index) in dictTable" :key="index" :label="item.name"
                     :show-overflow-tooltip="true" :prop="item.prop" :align="publicConfigStore.tableAlign"
                     :min-width="item.width">
@@ -67,10 +67,10 @@
                 <el-table-column label="操作" :align="publicConfigStore.tableAlign" class-name="small-padding fixed-width"
                     fixed="right" width="180px">
                     <template #default="scope">
-                       
+
                         <div class="table-caozuo">
-                            <span @click="handleMeg(scope.row,1)">详情</span>
-                            <span @click="handleMeg(scope.row,2)">修改</span>
+                            <span @click="handleMeg(scope.row, 1)">详情</span>
+                            <span @click="handleMeg(scope.row, 2)">修改</span>
                             <span @click="handleDel(scope.row)">删除</span>
                         </div>
                     </template>
@@ -80,9 +80,10 @@
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
         <!-- 导出 -->
-        <exportDialog :dialogVisible="exportDialogVisible" @closes="handleExport"></exportDialog>
+        <exportDialog :dialogVisible="exportDialogVisible" introduce="按用户创建时间导出用户" @closes="handleExportFinash"></exportDialog>
         <!-- 上级审核人 -->
-        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" :title="titleDialog" ></SuperiorDialog>
+        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" :title="titleDialog">
+        </SuperiorDialog>
         <!-- 审核密码 -->
         <ManagerPwdDialog :dialogVisible="managerPwdDialogVisible" @closes="handleManagerPwd"></ManagerPwdDialog>
     </div>
@@ -99,14 +100,14 @@ import {
     dictQuery,
     dictTable
 } from './data/index.js'
-import {getUserList,deleteUser  } from "@/api/system/customer";
+import { getUserList, deleteUser ,exportUser} from "@/api/system/customer";
 import { ref } from 'vue';
 
-const { police_status,user_type } = proxy.useDict("police_status","user_type");
+const { police_status, user_type } = proxy.useDict("police_status", "user_type");
 //页面中用到的字典数据
 const dictData = ref({
     police_status: police_status,
-    user_type:user_type
+    user_type: user_type
 })
 //查询表单
 const queryParams = ref({
@@ -120,6 +121,9 @@ const total = ref(0);
 const titleDialog = ref('');
 //当前选中的数据
 const rowSelect = ref({})
+//当前选中的导出时间
+const exportDate = ref([])
+
 //操作步骤 1==删除 2==导出
 const typeSelect = ref(0)
 //审核人
@@ -135,9 +139,9 @@ const managerPwdDialogVisible = ref(false)
 
 //查询 列表数据
 const getList = () => {
-   getUserList(queryParams.value).then((res)=>{
-    tableData.value = res.rows
-    total.value = res.total
+    getUserList(queryParams.value).then((res) => {
+        tableData.value = res.rows
+        total.value = res.total
     })
 }
 //点击 查询 按钮
@@ -162,11 +166,11 @@ const resetQuery = () => {
 }
 
 //点击 删除 按钮
-const handleDel =  (row)=>{
+const handleDel = (row) => {
     proxy.$modal
         .confirm('删除需要管理员进行审核，是否确认申请删除?')
-        .then( function () {
-           
+        .then(function () {
+
             titleDialog.value = '删除'
             typeSelect.value = 1
             rowSelect.value = row
@@ -175,35 +179,71 @@ const handleDel =  (row)=>{
         .catch(() => { });
 }
 //点击 修改和详情 1==详情 2==修改
-const handleMeg = (row,type) => {
+const handleMeg = (row, type) => {
     router.push({
         path: "/customer/customerEdit",
         query: {
             id: 1,
-            type:type
+            type: type
         }
     })
 }
 //点击 导出
-const handleExport = (boo)=>{
+const handleExport = (boo) => {
     exportDialogVisible.value = boo
+
+}
+//确认导出之后
+const handleExportFinash = (boo, date) => {
+    typeSelect.value = 2
+    if (date && date.length > 0) {
+        exportDate.value = date
+        superiorDialogVisible.value = true
+    }
+    exportDialogVisible.value = false
 }
 //选择上级完成
-const handleSuperior = (boo,userId)=>{
-    superiorName.value =userId
+const handleSuperior = (boo, userId) => {
+
+    if (userId) {
+        superiorName.value = userId
+        managerPwdDialogVisible.value = true
+    }
     superiorDialogVisible.value = false
-    managerPwdDialogVisible.value = true
+
 
 }
 //密码输入完成
-const handleManagerPwd = (boo,pwd)=>{
+const handleManagerPwd = (boo, pwd) => {
+    
+    if (pwd) {
+        superiorDialogVisible.value = false
+        //删除
+        if (typeSelect.value == 1) delSubmit(pwd)
+        //导出
+        if (typeSelect.value == 2) exportSubmit(pwd)
+    }
+
+
     managerPwdDialogVisible.value = false
-    //删除
-    if(typeSelect.value == 1) delSubmit(pwd)
+
 }
-const delSubmit = async (pwd)=>{
-      const res = await deleteUser({auditPassword:pwd,leaderName:superiorName.value,id:rowSelect.value.id})
-      if(res.code == 0) getList()
+//提交删除
+const delSubmit = async (pwd) => {
+    const res = await deleteUser({ auditPassword: pwd, leaderName: superiorName.value, id: rowSelect.value.id })
+    if (res.code == 200) getList()
+}
+//提交导出
+const exportSubmit =  async (pwd) => {
+    let obj = JSON.parse(JSON.stringify(queryParams.value))
+    obj.auditPassword = pwd
+    obj.startTime = exportDate.value[0]
+    obj.endTime = exportDate.value[1]
+    
+    const res = await exportUser(obj)
+//     proxy.download("system/user/export", {
+//     ...queryParams.value,
+//   },`user_${new Date().getTime()}.xlsx`);
 }
 getList()
 </script>

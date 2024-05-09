@@ -258,3 +258,8 @@ cursor: pointer;
   border-bottom: 1px solid #EFF3F6;
  
 }
+.blue{
+  color: #3787FF;
+  &.cur{cursor: pointer;
+  }
+}

@@ -4,29 +4,30 @@
 	
 	
 	{
-	  prop: "relevanceEpId",
-	  type: "select",
+	  prop: "type",
+	  type: "input",
 	  name: "密钥类型",
-	  dict: "sys_authentication",
+	//   dict: "sys_authentication",
 	  placeholder: "请选择",
 	  width: "120px",
 	},
 	{
-	  prop: "idNumber",
-	  type: "input",
+	  prop: "resetType",
+	  type: "select",
 	  name: "作用系统",
+	  dict: "reset_type",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
 	{
-		prop: "name",
+		prop: "expirationTime",
 		type: "input",
 		name: "有效期",
 		placeholder: "请输入",
 		width: "180px",
 	  },
 	  {
-		prop: "name",
+		prop: "createTime",
 		type: "input",
 		name: "新增时间",
 		placeholder: "请输入",
@@ -40,7 +41,7 @@
 		width: "180px",
 	  },
 	  {
-		prop: "name",
+		prop: "updateTime",
 		type: "input",
 		name: "上次刷新时间",
 		placeholder: "请输入",

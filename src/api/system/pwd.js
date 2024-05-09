@@ -1,19 +1,18 @@
 import request from '@/utils/request'
 
-// 查询客户列表
-export function getUserList(query) {
+// 查询密钥管理
+export function getKeysList(query) {
   return request({
-    url: '/zuser/list',
+    url: '/keys/list',
     method: 'get',
     params: query
   })
 }
-// 删除客户
-export function deleteUser(query) {
+// 刷新密码
+export function reshPwd(query) {
   return request({
-    url: '/zuser/delete',
-    method: 'get',
-    params: query
+    url: '/keys/upKey/'+query,
+    method: 'get'
   })
 }
 // 导出客户

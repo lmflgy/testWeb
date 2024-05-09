@@ -15,7 +15,7 @@
             fontWeight: publicConfigStore.tableHeaderBold,
             fontSize: publicConfigStore.tableHeaderFont
         }">
-                <el-table-column type="selection" label="序号" :width="publicConfigStore.tableIndexWidth" />
+                <el-table-column type="index" label="序号" :width="publicConfigStore.tableIndexWidth" />
                 <el-table-column v-for="(item, index) in dictTable" :key="index" :label="item.name"
                     :show-overflow-tooltip="true" :prop="item.prop" :align="publicConfigStore.tableAlign"
                     :min-width="item.width">
@@ -35,7 +35,7 @@
                     <template #default="scope">
                        
                         <div class="table-caozuo">
-                            <span @click="handleMeg(scope.row,1)">手动刷新密钥</span>
+                            <span @click="handleResh(scope.row)">手动刷新密钥</span>
                             <span @click="handleDetail(scope.row)">查看日志</span>
                         </div>
                     </template>
@@ -55,6 +55,7 @@ import {
 const {
     proxy
 } = getCurrentInstance();
+import { getKeysList,reshPwd} from "@/api/system/pwd";
 const router = useRouter();
 import {
     dictTable
@@ -72,8 +73,8 @@ const queryParams = ref({
     pageSize: 10
 });
 //数据列表
-const tableData = ref([{}]);
-const total = ref(10);
+const tableData = ref([]);
+const total = ref(0);
 //弹框
 const exportDialogVisible = ref(false)
 
@@ -81,7 +82,10 @@ const exportDialogVisible = ref(false)
 
 //查询 列表数据
 const getList = () => {
-
+    getKeysList(queryParams.value).then((res) => {
+        tableData.value = res.rows
+        total.value = res.total
+    })
 }
 //点击 查询 按钮
 const handleQuery = () => {
@@ -137,5 +141,12 @@ const handleExport = (boo)=>{
 const handleSelectionChange = ()=>{
 
 }
+//刷新密码
+const handleResh = async(row)=>{
+    const res = await reshPwd(row.id)
+    if(res.code == 200) proxy.$modal.msgSuccess("手动刷新密钥成功");
+
+}
+getList()
 </script>
 <style lang="scss" scoped></style>

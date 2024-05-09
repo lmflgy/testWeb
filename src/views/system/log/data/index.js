@@ -28,7 +28,7 @@ export const dictQuery = [
 	},
 	{
 		prop: "relevance",
-		type: "date",
+		type: "datetimerange",
 		name: "时间段查询：",
 		placeholder: "请选择",
 	  },
@@ -339,7 +339,7 @@ export const disabledPeopleQuery = [
   //风险预警日志 表格显示
   export const riskTable = [
 	{
-		prop: "name",
+		prop: "nickName",
 		type: "input",
 		name: "操作员",
 		placeholder: "请输入",
