@@ -1,5 +1,5 @@
 .customer-edit-con {
-    .el-input,.el-select{width: 200px;}
+    .el-input,.el-select,.el-textarea{width: 200px;}
     .form-content {
         padding: 20px 0;
 
@@ -21,7 +21,7 @@
             font-weight: normal;
         }
         .row-mar{margin-top: 20px;}
-        .btns{display: flex;justify-content: center;}
+        .btns{display: flex;justify-content: center;margin-top: 40px;}
     }
 
     .step {

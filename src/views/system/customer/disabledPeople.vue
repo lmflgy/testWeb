@@ -43,7 +43,7 @@
                 <div>
                     <el-button type="primary" class="export">导入</el-button>
                     <el-button type="primary" class="export" @click="handleLog">导入日志</el-button>
-                    <el-button type="primary" class="export" @click="handleExport(true)">导出</el-button>
+                    <!-- <el-button type="primary" class="export" @click="handleExport(true)">导出</el-button> -->
                 </div>
             </div>
             <el-table :data="tableData" border style="width: 100%" :stripe="publicConfigStore.tableStripe"

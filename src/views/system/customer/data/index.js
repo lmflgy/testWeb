@@ -80,7 +80,7 @@ export const dictQuery = [
 	  width: "120px",
 	},
 	{
-	  prop: "dataSource",
+	  prop: "resetStatus",
 	  type: "select",
 	  name: "数据来源",
 	  dict: "user_type",
@@ -271,13 +271,13 @@ export const backListQuery = [
 	  placeholder: "请选择",
 	},
 	
-	{
-	  prop: "relevanceEpId",
-	  type: "select",
-	  name: "关联类型：",
-	  dict: "with_or_without",
-	  placeholder: "请选择",
-	},
+	// {
+	//   prop: "relevanceEpId",
+	//   type: "select",
+	//   name: "关联类型：",
+	//   dict: "with_or_without",
+	//   placeholder: "请选择",
+	// },
   ];
   //客户信息表格显示
   export const backListTable = [
@@ -311,22 +311,22 @@ export const backListQuery = [
 	  placeholder: "请输入",
 	  width: "180px",
 	},
-	{
-	  prop: "relevanceEpId",
-	  type: "select",
-	  name: "关联类型",
-	  dict: "sys_authentication",
-	  placeholder: "请选择",
-	  width: "120px",
-	},
-	{
-	  prop: "blackType",
-	  type: "select",
-	  name: "黑名单类型",
-	  dict: "with_or_without",
-	  placeholder: "请选择",
-	  width: "120px",
-	},
+	// {
+	//   prop: "relevanceEpId",
+	//   type: "select",
+	//   name: "关联类型",
+	//   dict: "sys_authentication",
+	//   placeholder: "请选择",
+	//   width: "120px",
+	// },
+	// {
+	//   prop: "blackType",
+	//   type: "select",
+	//   name: "黑名单类型",
+	//   dict: "with_or_without",
+	//   placeholder: "请选择",
+	//   width: "120px",
+	// },
 	{
 	  prop: "remark",
 	  type: "input",

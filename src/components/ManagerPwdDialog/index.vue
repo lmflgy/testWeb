@@ -44,10 +44,10 @@ const password = ref('')
 
 //方法
 const close = () => {
-  const key = Cookies.get("key");
-  let pwd = encrypt(password.value,key)
-  emits('closes', false,pwd)
-  password.value = ''
+	
+	emits('cancel', 3)
+	password.value = ''
+  
 }
 
 //提交数据
@@ -56,7 +56,10 @@ const handleCommit = () => {
     proxy.$modal.msgError(`请输入审核密码!`);
     return false
   }
-  close()
+  const key = Cookies.get("key");
+  let pwd = encrypt(password.value,key)
+  emits('closes', false,pwd)
+  password.value = ''
 }
 
 

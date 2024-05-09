@@ -17,6 +17,7 @@
             range-separator="至"
             start-placeholder="开始时间"
             end-placeholder="结束时间"
+			value-format="YYYY-MM-DD"
             />
         </div>
     </div>
@@ -48,7 +49,7 @@ const exportTime = ref([])
 
 //方法
 const close = ()=>{
-    emits('closes', false,exportTime.value)
+    emits('cancel', 1)
     exportTime.value = []
 }
 //提交数据
@@ -57,7 +58,8 @@ const handleCommit = () => {
     proxy.$modal.msgError(`请选择导出时间范围!`);
     return false
   }
-  close()
+  emits('closes', false,exportTime.value)
+  exportTime.value = []
 }
 </script>
 <style lang="scss" scoped>

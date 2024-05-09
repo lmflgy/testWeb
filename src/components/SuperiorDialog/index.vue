@@ -47,8 +47,8 @@ const list = ref([])
 
 //方法
 const close = () => {
-  emits('closes', false, userId.value)
-  userId.value = ''
+ emits('cancel', 2)
+ userId.value = ''
  
 }
 
@@ -58,7 +58,8 @@ const handleCommit = () => {
     proxy.$modal.msgError(`请选择上级审核人!`);
     return false
   }
-  close()
+  emits('closes', false, userId.value)
+  userId.value = ''
 }
 //获取上级
 const getSuperior = async () => {

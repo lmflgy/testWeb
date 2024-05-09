@@ -16,17 +16,7 @@ export function deleteUser(query) {
     params: query
   })
 }
-// 导出客户
-export function exportUser(data) {
-  return request({
-    headers: {
-      'Content-Type': 'multipart/form-data;'
-  },
-    url: '/zuser/export',
-    method: 'post',
-    data: data
-  })
-}
+
 // 查询 残疾人信息管理
 export function getDisUserList(query) {
   return request({
@@ -42,5 +32,22 @@ export function getBlackUserList(query) {
     url: '/black/list',
     method: 'get',
     params: query
+  })
+}
+// 查询 黑名单列表
+export function moveBlackUser(query) {
+  return request({
+    url: '/black/delete',
+    method: 'get',
+    params: query
+  })
+}
+// 修改 黑名单
+export function updateBlackUser(data) {
+  return request({
+  
+    url: '/black/update',
+    method: 'post',
+    data: data
   })
 }

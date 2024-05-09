@@ -80,12 +80,12 @@
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
         <!-- 导出 -->
-        <exportDialog :dialogVisible="exportDialogVisible" introduce="按用户创建时间导出用户" @closes="handleExportFinash"></exportDialog>
+        <exportDialog :dialogVisible="exportDialogVisible" introduce="按用户创建时间导出用户" @closes="handleExportFinash" @cancel="cancelDialog"></exportDialog>
         <!-- 上级审核人 -->
-        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" :title="titleDialog">
+        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" @cancel="cancelDialog" :title="titleDialog">
         </SuperiorDialog>
         <!-- 审核密码 -->
-        <ManagerPwdDialog :dialogVisible="managerPwdDialogVisible" @closes="handleManagerPwd"></ManagerPwdDialog>
+        <ManagerPwdDialog :dialogVisible="managerPwdDialogVisible" @closes="handleManagerPwd" @cancel="cancelDialog"></ManagerPwdDialog>
     </div>
 </template>
 <script setup name="Customer">
@@ -100,14 +100,15 @@ import {
     dictQuery,
     dictTable
 } from './data/index.js'
-import { getUserList, deleteUser ,exportUser} from "@/api/system/customer";
+import { getUserList, deleteUser} from "@/api/system/customer";
 import { ref } from 'vue';
 
-const { police_status, user_type } = proxy.useDict("police_status", "user_type");
+const { police_status, user_type,reset_status } = proxy.useDict("police_status", "user_type","reset_status");
 //页面中用到的字典数据
 const dictData = ref({
     police_status: police_status,
-    user_type: user_type
+    user_type: user_type,
+	reset_status:reset_status
 })
 //查询表单
 const queryParams = ref({
@@ -117,8 +118,6 @@ const queryParams = ref({
 //数据列表
 const tableData = ref([]);
 const total = ref(0);
-//弹框标题
-const titleDialog = ref('');
 //当前选中的数据
 const rowSelect = ref({})
 //当前选中的导出时间
@@ -126,9 +125,10 @@ const exportDate = ref([])
 
 //操作步骤 1==删除 2==导出
 const typeSelect = ref(0)
+//弹框标题
+const titleDialog = ref('');
 //审核人
 const superiorName = ref('')
-
 //导出弹框
 const exportDialogVisible = ref(false)
 //上级审核弹框
@@ -210,8 +210,12 @@ const handleSuperior = (boo, userId) => {
         managerPwdDialogVisible.value = true
     }
     superiorDialogVisible.value = false
-
-
+}
+//关闭弹框
+const cancelDialog = (type)=>{
+	if(type == 1) exportDialogVisible.value = false
+	else if(type == 2) superiorDialogVisible.value = false
+	else managerPwdDialogVisible.value = false
 }
 //密码输入完成
 const handleManagerPwd = (boo, pwd) => {
@@ -223,15 +227,15 @@ const handleManagerPwd = (boo, pwd) => {
         //导出
         if (typeSelect.value == 2) exportSubmit(pwd)
     }
-
-
-    managerPwdDialogVisible.value = false
-
+   
 }
 //提交删除
 const delSubmit = async (pwd) => {
     const res = await deleteUser({ auditPassword: pwd, leaderName: superiorName.value, id: rowSelect.value.id })
-    if (res.code == 200) getList()
+    if (res.code == 200) {
+		 managerPwdDialogVisible.value = false
+		getList()
+	}
 }
 //提交导出
 const exportSubmit =  async (pwd) => {
@@ -239,11 +243,8 @@ const exportSubmit =  async (pwd) => {
     obj.auditPassword = pwd
     obj.startTime = exportDate.value[0]
     obj.endTime = exportDate.value[1]
-    
-    const res = await exportUser(obj)
-//     proxy.download("system/user/export", {
-//     ...queryParams.value,
-//   },`user_${new Date().getTime()}.xlsx`);
+	
+    proxy.download("zuser/export", obj,`user_${new Date().getTime()}.xlsx`);
 }
 getList()
 </script>
