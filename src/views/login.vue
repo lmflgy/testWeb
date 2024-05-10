@@ -78,7 +78,7 @@ const { proxy } = getCurrentInstance();
 const loginForm = ref({
   username: "admin",
   password: "admin123",
-  rememberMe: false,
+  rememberMe: true,
   code: "",
   uuid: ""
 });
@@ -116,7 +116,6 @@ function handleLogin() {
         Cookies.remove("username");
         Cookies.remove("password");
         Cookies.remove("rememberMe");
-        Cookies.remove("key");
       }
       // 调用action的登录方法
      let loginInfo = JSON.parse(JSON.stringify(loginForm.value))
