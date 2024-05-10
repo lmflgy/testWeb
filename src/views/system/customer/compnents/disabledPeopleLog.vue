@@ -51,7 +51,7 @@
             fontWeight: publicConfigStore.tableHeaderBold,
             fontSize: publicConfigStore.tableHeaderFont
         }">
-                <el-table-column type="index" width="55" label="序号" :width="publicConfigStore.tableIndexWidth" />
+                <el-table-column type="index" label="序号" :width="publicConfigStore.tableIndexWidth" />
                 <el-table-column v-for="(item, index) in disabledPeopleLogTable" :key="index" :label="item.name"
                     :show-overflow-tooltip="true" :prop="item.prop" :align="publicConfigStore.tableAlign"
                     :min-width="item.width">
@@ -72,7 +72,12 @@
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
         <!-- 导出 -->
-        <exportDialog :dialogVisible="exportDialogVisible" @close="handleExport"></exportDialog>
+        <exportDialog :dialogVisible="exportDialogVisible" introduce="按导入时间导出用户" @closes="handleExportFinash" @cancel="cancelDialog"></exportDialog>
+        <!-- 上级审核人 -->
+        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" @cancel="cancelDialog" :title="titleDialog">
+        </SuperiorDialog>
+        <!-- 审核密码 -->
+        <ManagerPwdDialog :dialogVisible="managerPwdDialogVisible" @closes="handleManagerPwd" @cancel="cancelDialog"></ManagerPwdDialog>
     </div>
 </template>
 <script setup name="Customer">
@@ -82,8 +87,8 @@ import {
 const {
     proxy
 } = getCurrentInstance();
+import { getlogList} from "@/api/system/customer";
 const router = useRouter();
-import exportDialog from '../dialog/export.vue';
 import {
     disabledPeopleLogQuery,
     disabledPeopleLogTable
@@ -101,20 +106,36 @@ const queryParams = ref({
     pageSize: 10
 });
 //数据列表
-const tableData = ref([{}]);
-const total = ref(10);
-//弹框
-const exportDialogVisible = ref(false)
+const tableData = ref([]);
+const total = ref(0);
 
+
+//当前选中的导出时间
+const exportDate = ref([])
+//弹框标题
+const titleDialog = ref('导出');
+//审核人
+const superiorName = ref('')
+//导出弹框
+const exportDialogVisible = ref(false)
+//上级审核弹框
+const superiorDialogVisible = ref(false)
+//输入密码弹框
+const managerPwdDialogVisible = ref(false)
 
 
 //查询 列表数据
 const getList = () => {
-
+    getlogList(queryParams.value).then((res) => {
+        tableData.value = res.rows
+        total.value = res.total
+    })
 }
 //点击 查询 按钮
 const handleQuery = () => {
-
+    queryParams.value.pageNum = 1
+    queryParams.value.pageSize = 10
+    getList()
 }
 //点击 重置 按钮
 const resetQuery = () => {
@@ -130,11 +151,56 @@ const resetQuery = () => {
     });
     handleQuery();
 }
-
+getList()
 
 //点击 导出
-const handleExport = (boo) => {
+const handleExport = (boo)=>{
     exportDialogVisible.value = boo
+}
+//确认导出之后
+const handleExportFinash = (boo, date) => {
+    if (date && date.length > 0) {
+        exportDate.value = date
+        superiorDialogVisible.value = true
+    }
+    exportDialogVisible.value = false
+}
+//选择上级完成
+const handleSuperior = (boo, userId) => {
+
+    if (userId) {
+        superiorName.value = userId
+        managerPwdDialogVisible.value = true
+    }
+    superiorDialogVisible.value = false
+}
+//关闭弹框
+const cancelDialog = (type)=>{
+	if(type == 1) exportDialogVisible.value = false
+	else if(type == 2) superiorDialogVisible.value = false
+	else managerPwdDialogVisible.value = false
+}
+//密码输入完成
+const handleManagerPwd = (boo, pwd) => {
+    
+    if (pwd) {
+        superiorDialogVisible.value = false
+        //导出日志
+        exportSubmit(pwd)
+    }
+   
+}
+//提交导出
+const exportSubmit =  async (pwd) => {
+    let obj = JSON.parse(JSON.stringify(queryParams.value))
+    obj.auditPassword = pwd
+    debugger
+    obj.leaderName = superiorName.value
+    obj.startTime = exportDate.value[0]
+    obj.endTime = exportDate.value[1]
+	
+  await  proxy.download("/dis/log/export", obj,`user_${new Date().getTime()}.xlsx`);
+    managerPwdDialogVisible.value = false
 }
 </script>
 <style lang="scss" scoped></style>

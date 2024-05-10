@@ -195,21 +195,21 @@ export const disabledPeopleQuery = [
     //残疾人信息管理 导入日志
 export const disabledPeopleLogQuery = [
 	{
-	  prop: "name",
+	  prop: "creater",
 	  type: "input",
 	  name: "导入人名称：",
 	  placeholder: "请输入",
 	},
 	
+	// {
+	//   prop: "importSource",
+	//   type: "select",
+	//   name: "导入来源：",
+	//   dict: "sys_authentication",
+	//   placeholder: "请选择",
+	// },
 	{
-	  prop: "relevanceEpId",
-	  type: "select",
-	  name: "导入来源：",
-	  dict: "sys_authentication",
-	  placeholder: "请选择",
-	},
-	{
-		prop: "relevance",
+		prop: "createTime",
 		type: "date",
 		name: "导入时间：",
 		placeholder: "请选择",
@@ -218,30 +218,30 @@ export const disabledPeopleLogQuery = [
   //残疾人信息管理 导入日志表格显示
   export const disabledPeopleLogTable = [
 	{
-	  prop: "name",
+	  prop: "creater",
 	  type: "input",
 	  name: "导入人姓名",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
 	
+	// {
+	//   prop: "importSource",
+	//   type: "select",
+	//   name: "导入来源",
+	//   dict: "sys_authentication",
+	//   placeholder: "请选择",
+	//   width: "120px",
+	// },
 	{
-	  prop: "relevanceEpId",
-	  type: "select",
-	  name: "导入来源",
-	  dict: "sys_authentication",
-	  placeholder: "请选择",
-	  width: "120px",
-	},
-	{
-	  prop: "emergencyContact",
+	  prop: "count",
 	  type: "input",
 	  name: "导入黑名单数量",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
 	{
-		prop: "emergencyContact",
+		prop: "createTime",
 		type: "input",
 		name: "导入时间",
 		placeholder: "请输入",

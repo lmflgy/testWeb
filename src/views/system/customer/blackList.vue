@@ -53,7 +53,7 @@
             fontWeight: publicConfigStore.tableHeaderBold,
             fontSize: publicConfigStore.tableHeaderFont
         }">
-                <el-table-column type="index" width="55" label="序号" :width="publicConfigStore.tableIndexWidth" />
+                <el-table-column type="index" label="序号" :width="publicConfigStore.tableIndexWidth" />
                 <el-table-column v-for="(item, index) in backListTable" :key="index" :label="item.name"
                     :show-overflow-tooltip="true" :prop="item.prop" :align="publicConfigStore.tableAlign"
                     :min-width="item.width">

@@ -40,9 +40,19 @@
         <el-card :shadow="publicConfigStore.cardShadow">
             <div class="table-total">
                 <div>共 <span class="count">{{ total }}</span> 条数据</div>
-                <div>
-                    <el-button type="primary" class="export">导入</el-button>
-                    <el-button type="primary" class="export" @click="handleLog">导入日志</el-button>
+                <div style="display: flex;">
+                    <!-- <el-button type="primary" class="export">导入</el-button> -->
+                    <el-upload
+                        class="upload-demo"
+                        :action="uploadUrl"
+                        :limit="1"
+                        :before-upload="handleBeforeUpload"
+                        :on-success="handleSuccess"
+                        ref="uplaodLog"
+                    >
+                        <el-button type="primary">导入</el-button>
+                    </el-upload>
+                    <el-button type="primary" class="export mar20" @click="handleLog">导入日志</el-button>
                     <!-- <el-button type="primary" class="export" @click="handleExport(true)">导出</el-button> -->
                 </div>
             </div>
@@ -104,6 +114,7 @@ const queryParams = ref({
     pageNum: 1,
     pageSize: 10
 });
+const uploadUrl = ref('/dev-api/dis/importData')
 //数据列表
 const tableData = ref([]);
 const total = ref(0);
@@ -172,6 +183,16 @@ const handleMeg = (row, type) => {
 const handleExport = (boo) => {
     exportDialogVisible.value = boo
 }
+const handleBeforeUpload = ()=>{
+    
+}
+//上传成功
+const handleSuccess = ()=>{
+    proxy.$modal.msgSuccess("导入成功");
+    proxy.$refs.uplaodLog.clearFiles()
+}
 getList()
 </script>
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.mar20{margin-left: 20px;}
+</style>

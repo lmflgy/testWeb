@@ -51,3 +51,11 @@ export function updateBlackUser(data) {
     data: data
   })
 }
+// 查询 导入日志列表
+export function getlogList(query) {
+  return request({
+    url: '/dis/log/list',
+    method: 'get',
+    params: query
+  })
+}

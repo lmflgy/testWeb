@@ -241,6 +241,7 @@ const delSubmit = async (pwd) => {
 const exportSubmit =  async (pwd) => {
     let obj = JSON.parse(JSON.stringify(queryParams.value))
     obj.auditPassword = pwd
+    obj.leaderName = superiorName.value
     obj.startTime = exportDate.value[0]
     obj.endTime = exportDate.value[1]
 	
