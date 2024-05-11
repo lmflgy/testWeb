@@ -62,10 +62,13 @@ import {
 } from './data/index.js'
 import { ref } from 'vue';
 import exportDialog from '@/components/exportDialog';
-const { sys_authentication } = proxy.useDict("sys_authentication");
+const { sys_authentication,user_type,key_type,reset_type } = proxy.useDict("reset_type","sys_authentication","user_type","key_type");
 //页面中用到的字典数据
 const dictData = ref({
-    sys_authentication: sys_authentication
+    sys_authentication: sys_authentication,
+    user_type: user_type,
+    key_type: key_type,
+    reset_type:reset_type
 })
 //查询表单
 const queryParams = ref({

@@ -139,7 +139,7 @@ export const disabledPeopleQuery = [
 		prop: "sex",
 		type: "select",
 		name: "性别",
-		dict: "dis_status",
+		dict: "sys_user_sex",
 		placeholder: "请选择",
 		width: "120px",
 	  },
@@ -171,7 +171,7 @@ export const disabledPeopleQuery = [
 	  prop: "userLevel",
 	  type: "input",
 	  name: "残疾等级",
-	//   dict: "with_or_without",
+	  dict: "disable_level",
 	  placeholder: "请选择",
 	  width: "120px",
 	},
@@ -182,34 +182,26 @@ export const disabledPeopleQuery = [
 	  placeholder: "请输入",
 	  width: "120px",
 	},
-	{
-		prop: "status",
-		type: "select",
-		name: "状态",
-		dict: "dis_status",
-		placeholder: "请选择",
-		width: "120px",
-	  },
   ];
 
     //残疾人信息管理 导入日志
 export const disabledPeopleLogQuery = [
 	{
-	  prop: "creater",
+	  prop: "name",
 	  type: "input",
 	  name: "导入人名称：",
 	  placeholder: "请输入",
 	},
 	
-	// {
-	//   prop: "importSource",
-	//   type: "select",
-	//   name: "导入来源：",
-	//   dict: "sys_authentication",
-	//   placeholder: "请选择",
-	// },
 	{
-		prop: "createTime",
+	  prop: "relevanceEpId",
+	  type: "select",
+	  name: "导入来源：",
+	  dict: "sys_authentication",
+	  placeholder: "请选择",
+	},
+	{
+		prop: "relevance",
 		type: "date",
 		name: "导入时间：",
 		placeholder: "请选择",
@@ -218,30 +210,30 @@ export const disabledPeopleLogQuery = [
   //残疾人信息管理 导入日志表格显示
   export const disabledPeopleLogTable = [
 	{
-	  prop: "creater",
+	  prop: "name",
 	  type: "input",
 	  name: "导入人姓名",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
 	
-	// {
-	//   prop: "importSource",
-	//   type: "select",
-	//   name: "导入来源",
-	//   dict: "sys_authentication",
-	//   placeholder: "请选择",
-	//   width: "120px",
-	// },
 	{
-	  prop: "count",
+	  prop: "relevanceEpId",
+	  type: "select",
+	  name: "导入来源",
+	  dict: "sys_authentication",
+	  placeholder: "请选择",
+	  width: "120px",
+	},
+	{
+	  prop: "emergencyContact",
 	  type: "input",
 	  name: "导入黑名单数量",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
 	{
-		prop: "createTime",
+		prop: "emergencyContact",
 		type: "input",
 		name: "导入时间",
 		placeholder: "请输入",

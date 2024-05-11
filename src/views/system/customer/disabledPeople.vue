@@ -102,11 +102,13 @@ import {
 } from './data/index.js'
 import { ref } from 'vue';
 
-const { dis_status,cert_type,dis_user_type } = proxy.useDict("dis_status","cert_type","dis_user_type");
+const { dis_status,cert_type,dis_user_type,sys_user_sex,disable_level } = proxy.useDict("disable_level","sys_user_sex","dis_status","cert_type","dis_user_type");
 //页面中用到的字典数据
 const dictData = ref({
     dis_status: dis_status,
+    disable_level:disable_level,
     cert_type:cert_type,
+    sys_user_sex:sys_user_sex,
     dis_user_type:dis_user_type
 })
 //查询表单
