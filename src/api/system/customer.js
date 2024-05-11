@@ -59,3 +59,12 @@ export function getlogList(query) {
     params: query
   })
 }
+
+// 导入 导入
+export function importData(data) {
+  return request({
+    url: '/dis/importData',
+    method: 'post',
+    data: data
+  })
+}
