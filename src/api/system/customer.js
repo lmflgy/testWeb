@@ -51,6 +51,14 @@ export function updateBlackUser(data) {
     data: data
   })
 }
+// 新增 黑名单
+export function addBlackUser(data) {
+  return request({
+    url: '/black/save',
+    method: 'post',
+    data: data
+  })
+}
 // 查询 导入日志列表
 export function getlogList(query) {
   return request({
@@ -64,6 +72,9 @@ export function getlogList(query) {
 export function importData(data) {
   return request({
     url: '/dis/importData',
+	headers: {
+	                "Content-Type": "multipart/form-data", //设置请求头
+	              },
     method: 'post',
     data: data
   })

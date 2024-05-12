@@ -177,6 +177,7 @@ const handleDel = (row) => {
 }
 //点击 修改和详情 1==新增 2==修改 3==详情
 const handleMeg = (row,type) => {
+	
     router.push({
         path: "/customer/blackListEdit",
         query: {
