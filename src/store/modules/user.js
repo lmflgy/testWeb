@@ -11,11 +11,13 @@ const useUserStore = defineStore(
       name: '',
       avatar: '',
       roles: [],
-      permissions: []
+      permissions: [],
+      phonenumber:''
     }),
     actions: {
       // 登录
       login(userInfo) {
+        
         const username = userInfo.username.trim()
         const password = userInfo.password
         const code = userInfo.code
@@ -44,6 +46,7 @@ const useUserStore = defineStore(
               this.roles = ['ROLE_DEFAULT']
             }
             this.id = user.userId
+            this.phonenumber = user.phonenumber.slice(-4);
             this.name = user.userName
             this.avatar = avatar
             resolve(res)

@@ -10,7 +10,14 @@
 
 					<el-row class="row-mar">
 
-
+						<el-col :span="8" class="row">
+							<el-form-item label="作用类型：" prop="resetStatus" :rules="[{ required: true, message: '请选择作用类型' }]">
+								<el-select v-model="form.resetStatus" clearable>
+									<el-option v-for="dict in user_type" :key="dict.value" :label="dict.label"
+										:value="dict.value" />
+								</el-select>
+							</el-form-item>
+						</el-col>
 						<el-col :span="8" class="row">
 							<el-form-item label="密钥类型：" prop="type" :rules="[{ required: true, message: '请选择密钥类型' }]">
 								<el-select v-model="form.type" clearable>
@@ -69,8 +76,9 @@
 	const {
 		sys_authentication,
 		key_type,
-		reset_type
-	} = proxy.useDict("sys_authentication", "key_type", "reset_type");
+		reset_type,
+		user_type
+	} = proxy.useDict("sys_authentication", "key_type", "reset_type","user_type");
 	import {
 		keysAdd
 	} from "@/api/system/pwd";
@@ -79,7 +87,6 @@
 	//自定义的字段
 	const active = ref(1)
 	const form = ref({})
-	const imgUrl = ref('https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg')
 	//1详情 2修改
 	const type = ref(1)
 	const activeName = ref('name1')

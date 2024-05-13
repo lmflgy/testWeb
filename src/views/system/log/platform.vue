@@ -60,7 +60,9 @@
                         <span v-if="item.type == 'select'">
                             <dict-tag :options="dictData[item.dict]" :value="scope.row[item.prop]" />
                         </span>
-
+                        <span v-if="item.type == 'time'">
+                            <span>{{ parseTime(scope.row.operTime) }}</span>
+                        </span>
                     </template>
                 </el-table-column>
 
@@ -70,7 +72,12 @@
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
         <!-- 导出 -->
-        <exportDialog :dialogVisible="exportDialogVisible" @close="handleExport"></exportDialog>
+        <exportDialog :dialogVisible="exportDialogVisible" introduce="按用户操作时间导出" @closes="handleExportFinash" @cancel="cancelDialog"></exportDialog>
+        <!-- 上级审核人 -->
+        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" @cancel="cancelDialog" :title="titleDialog">
+        </SuperiorDialog>
+        <!-- 审核密码 -->
+        <ManagerPwdDialog :dialogVisible="managerPwdDialogVisible" @closes="handleManagerPwd" @cancel="cancelDialog"></ManagerPwdDialog>
     </div>
 </template>
 <script setup name="Customer">
@@ -80,17 +87,20 @@ import {
 const {
     proxy
 } = getCurrentInstance();
+
+import { getOperlogList} from "@/api/system/log";
 const router = useRouter();
 import {
     disabledPeopleQuery,
     disabledPeopleTable
 } from './data/index.js'
 import { ref } from 'vue';
-import exportDialog from '@/components/exportDialog';
-const { sys_authentication } = proxy.useDict("sys_authentication");
+const { sys_authentication,sys_common_status,sys_oper_type } = proxy.useDict("sys_authentication","sys_common_status","sys_oper_type");
 //页面中用到的字典数据
 const dictData = ref({
-    sys_authentication: sys_authentication
+    sys_authentication: sys_authentication,
+    sys_common_status:sys_common_status,
+    sys_oper_type:sys_oper_type
 })
 //查询表单
 const queryParams = ref({
@@ -98,21 +108,40 @@ const queryParams = ref({
     pageSize: 10
 });
 //数据列表
-const tableData = ref([{}]);
-const total = ref(10);
-//弹框
+const tableData = ref([]);
+const total = ref(0);
+//当前选中的导出时间
+const exportDate = ref([])
+
+//操作步骤 1==删除 2==导出
+const typeSelect = ref(0)
+//弹框标题
+const titleDialog = ref('');
+//审核人
+const superiorName = ref('')
+//导出弹框
 const exportDialogVisible = ref(false)
+//上级审核弹框
+const superiorDialogVisible = ref(false)
+//输入密码弹框
+const managerPwdDialogVisible = ref(false)
 
 
 
 //查询 列表数据
 const getList = () => {
-
+    getOperlogList(queryParams.value).then((res) => {
+        tableData.value = res.rows
+        total.value = res.total
+    })
 }
 //点击 查询 按钮
 const handleQuery = () => {
-
+    queryParams.value.pageNum = 1
+    queryParams.value.pageSize = 10
+    getList()
 }
+
 //点击 重置 按钮
 const resetQuery = () => {
     Object.keys(queryParams.value).forEach((item) => {
@@ -147,12 +176,58 @@ const handleMeg = (row,type) => {
     })
 }
 //点击 导出
-const handleExport = (boo)=>{
+const handleExport = (boo) => {
     exportDialogVisible.value = boo
+
+}
+//确认导出之后
+const handleExportFinash = (boo, date) => {
+    typeSelect.value = 2
+    if (date && date.length > 0) {
+        exportDate.value = date
+        superiorDialogVisible.value = true
+    }
+    exportDialogVisible.value = false
+}
+//选择上级完成
+const handleSuperior = (boo, userId) => {
+
+    if (userId) {
+        superiorName.value = userId
+        managerPwdDialogVisible.value = true
+    }
+    superiorDialogVisible.value = false
+}
+//关闭弹框
+const cancelDialog = (type)=>{
+	if(type == 1) exportDialogVisible.value = false
+	else if(type == 2) superiorDialogVisible.value = false
+	else managerPwdDialogVisible.value = false
+}
+//密码输入完成
+const handleManagerPwd = (boo, pwd) => {
+    
+    if (pwd) {
+        superiorDialogVisible.value = false
+        exportSubmit(pwd)
+    }
+   
+}
+
+//提交导出
+const exportSubmit =  async (pwd) => {
+    let obj = JSON.parse(JSON.stringify(queryParams.value))
+    obj.auditPassword = pwd
+    obj.leaderName = superiorName.value
+    obj.startTime = exportDate.value[0]
+    obj.endTime = exportDate.value[1]
+	
+    proxy.download("monitor/operlog/export",obj, `config_${new Date().getTime()}.xlsx`);
 }
 //选中
 const handleSelectionChange = ()=>{
 
 }
+getList()
 </script>
 <style lang="scss" scoped></style>

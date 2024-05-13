@@ -35,13 +35,7 @@ export const dictQuery = [
   ];
   //入库日志表格显示
   export const dictTable = [
-	{
-	  prop: "name",
-	  type: "input",
-	  name: "流水号",
-	  placeholder: "请输入",
-	  width: "180px",
-	},
+	
 	{
 	  prop: "name",
 	  type: "input",
@@ -56,21 +50,7 @@ export const dictQuery = [
 		placeholder: "请输入",
 		width: "180px",
 	  },
-	{
-	  prop: "relevanceEpId",
-	  type: "select",
-	  name: "证件类型",
-	  dict: "sys_authentication",
-	  placeholder: "请选择",
-	  width: "120px",
-	},
-	{
-	  prop: "idNumber",
-	  type: "input",
-	  name: "证件号",
-	  placeholder: "请输入",
-	  width: "180px",
-	},
+	
 	{
 		prop: "relevanceEpId",
 		type: "select",
@@ -86,6 +66,13 @@ export const dictQuery = [
 		dict: "sys_authentication",
 		placeholder: "请选择",
 		width: "120px",
+	  },
+	  {
+		prop: "name",
+		type: "input",
+		name: "操作条数",
+		placeholder: "请输入",
+		width: "180px",
 	  },
 	  {
 		prop: "relevanceEpId",
@@ -147,25 +134,24 @@ export const disabledPeopleQuery = [
   //平台操作日志 表格显示
   export const disabledPeopleTable = [
 	{
-		prop: "relevanceEpId",
-		type: "select",
+		prop: "title",
+		type: "input",
 		name: "数据的来源",
-		dict: "sys_authentication",
 		placeholder: "请选择",
-		width: "120px",
+		width: "180px",
 	  },
 	{
-	  prop: "name",
-	  type: "input",
+	  prop: "operTime",
+	  type: "time",
 	  name: "操作时间",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
 	{
-		prop: "relevanceEpId",
+		prop: "status",
 		type: "select",
 		name: "操作结果",
-		dict: "sys_authentication",
+		dict: "sys_common_status",
 		placeholder: "请选择",
 		width: "120px",
 	  },
@@ -185,17 +171,17 @@ export const disabledPeopleQuery = [
 	//   width: "120px",
 	// },
 	{
-	  prop: "idNumber",
+	  prop: "operName",
 	  type: "input",
 	  name: "操作人",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
 	{
-		prop: "relevanceEpId",
+		prop: "businessType",
 		type: "select",
 		name: "操作类型",
-		dict: "sys_authentication",
+		dict: "sys_oper_type",
 		placeholder: "请选择",
 		width: "120px",
 	  },
@@ -389,25 +375,25 @@ export const disabledPeopleQuery = [
   //风险预警日志 表格显示
   export const autitTable = [
 	{
-		prop: "name",
+		prop: "userName",
 		type: "input",
 		name: "操作员",
 		placeholder: "请输入",
 		width: "120px",
 	  },
 	  {
-		prop: "relevanceEpId",
+		prop: "userType",
 		type: "select",
 		name: "来源",
-		dict: "sys_authentication",
+		dict: "user_type",
 		placeholder: "请选择",
 		width: "120px",
 	  },
 	  {
-		prop: "relevanceEpId",
+		prop: "warnLevel",
 		type: "select",
 		name: "风险状态",
-		dict: "sys_authentication",
+		dict: "warn_level",
 		placeholder: "请选择",
 		width: "120px",
 	  }

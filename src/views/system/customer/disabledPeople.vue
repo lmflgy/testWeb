@@ -246,7 +246,7 @@
 
 			superiorDialogVisible.value = false
 			//导出日志
-			// exportSubmit(pwd)
+			exportSubmit(pwd)
 		}
 
 	}

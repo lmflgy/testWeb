@@ -5,7 +5,7 @@
                 <div class="title">
                     <b>日志数量统计</b>
                     <div>
-                        <el-date-picker v-model="value1" type="date" placeholder="请选择" format="YYYY/MM/DD" />
+                        <el-date-picker v-model="formData.logCountDate" type="date" placeholder="请选择" format="YYYY-MM-DD" :clearable="false"/>
                     </div>
                 </div>
 
@@ -31,7 +31,7 @@
                     <b>平台操作日志</b>
                     <div>
 
-                        <el-date-picker v-model="value1" type="date" placeholder="请选择" format="YYYY/MM/DD" />
+                        <el-date-picker v-model="formData.platCountDate" type="date" placeholder="请选择" format="YYYY/MM/DD" />
                     </div>
                 </div>
 
@@ -86,7 +86,7 @@
                 fontWeight: publicConfigStore.tableHeaderBold,
                 fontSize: publicConfigStore.tableHeaderFont
             }">
-                        <el-table-column label="序号" :width="publicConfigStore.tableIndexWidth" />
+                        <el-table-column label="序号" type="index" :width="publicConfigStore.tableIndexWidth" />
                         <el-table-column v-for="(item, index) in autitTable" :key="index" :label="item.name"
                             :show-overflow-tooltip="true" :prop="item.prop" :align="publicConfigStore.tableAlign"
                             :min-width="item.width">
@@ -107,6 +107,12 @@
             </div>
 
         </el-card>
+
+         <!-- 上级审核人 -->
+         <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" @cancel="cancelDialog" :title="titleDialog">
+        </SuperiorDialog>
+        <!-- 审核密码 -->
+        <ManagerPwdDialog :dialogVisible="managerPwdDialogVisible" @closes="handleManagerPwd" @cancel="cancelDialog"></ManagerPwdDialog>
     </div>
 </template>
 <script setup>
@@ -123,27 +129,46 @@ import {
 } from './data/index.js'
 const router = useRouter();
 import { ref } from 'vue';
-import exportDialog from '@/components/exportDialog';
-const { sys_authentication } = proxy.useDict("sys_authentication");
+import { getEchartsCount,getEchartsWarnList} from "@/api/system/log";
+const { sys_authentication,sys_oper_type,user_type,warn_level } = proxy.useDict("sys_authentication","sys_oper_type","user_type","warn_level");
 //页面中用到的字典数据
 const dictData = ref({
-    sys_authentication: sys_authentication
+    sys_authentication: sys_authentication,
+    warn_level:warn_level,
+    user_type:user_type
+})
+//shuju
+const formData = ref({
+    logCountDate:proxy.getNowDate(1),//日志数量统计
+    platCountDate:proxy.getNowDate(1),//平台操作日志
+    echartsArr:['echarts1','echarts2','echarts3','echarts4'],
+    myChartArr:['myChart1','myChart2','myChart3','myChart4','myChart5'],
+    myChart1:null,
+    myChart2:null,
+    myChart3:null,
+    myChart4:null,
+    myChart5:null,
 })
 
-const value1 = ref('')
-const myChart1 = ref(null)
-const myChart2 = ref(null)
-const myChart3 = ref(null)
-const myChart4 = ref(null)
-const myChart5 = ref(null)
+
+//操作步骤 1==删除 2==导出
+const typeSelect = ref(0)
+//弹框标题
+const titleDialog = ref('');
+//审核人
+const superiorName = ref('')
+//上级审核弹框
+const superiorDialogVisible = ref(false)
+//输入密码弹框
+const managerPwdDialogVisible = ref(false)
+
 //平台日志下拉
 const platLog = ref('')
+const tableData = ref([]);
 onMounted(() => {
+   
     setTimeout(() => {
-        init('echarts1', 1)
-    }, 1000)
-    setTimeout(() => {
-        fenXianEcharts('echarts2', 2)
+        // fenXianEcharts('echarts2', 1)
     }, 2000)
     // setTimeout(()=>{
     //     init('echarts3',3)
@@ -153,20 +178,20 @@ onMounted(() => {
     // },4000)
 })
 
-const init = (name, index) => {
-    myChart1.value = echarts.init(document.getElementById(name));
-    myChart1.value.setOption(
+const init = (index,data) => {
+    formData.value[formData.value.myChartArr[index]] = echarts.init(document.getElementById(formData.value.echartsArr[index]));
+    formData.value[formData.value.myChartArr[index]].setOption(
         {
             xAxis: {
                 type: 'category',
-                data: ['入库日志', '平台操作日志', '第三方调用日志']
+                data: data[0]
             },
             yAxis: {
                 type: 'value'
             },
             series: [
                 {
-                    data: [120, 200, 150],
+                    data: data[1],
                     type: 'bar',
                     itemStyle: {
                         borderRadius: [5, 5, 0, 0], //（顺时针左上，右上，右下，左下）
@@ -278,10 +303,72 @@ const fenXianEcharts = () => {
 
 }
 
+//平台操作日志
+const getEchartsCountData = async()=>{
+    const res = await getEchartsCount({date:formData.value.platCountDate})
+    let dataArr = [[],[]]
+    for(let i = 0; i<sys_oper_type.value.length;i++){
+       let dict = sys_oper_type.value[i]
+       dataArr[0].push(dict.label)
+       dataArr[1].push(0)
+       for(let k = 0; k<res.data.length;k++){
+        if(dict.value == res.data[k].businessType)  dataArr[1][dataArr[1].length-1]=(res.data[k].count)
+        
+       }
+    }
+    setTimeout(()=>{
+        init(2,dataArr)
+    },500)
+}
+//风险人员
+const getEchartsDangerPlepeoData = async()=>{
+    const res = await getEchartsWarnList({date:proxy.getNowDate(1)})
+    tableData.value = res.data
+}
+//点击 导出
+const handleExport = (boo) => {
+    superiorDialogVisible.value = boo
 
+}
+//选择上级完成
+const handleSuperior = (boo, userId) => {
 
+if (userId) {
+    superiorName.value = userId
+    managerPwdDialogVisible.value = true
+}
+superiorDialogVisible.value = false
+}
+//关闭弹框
+const cancelDialog = (type)=>{
+if(type == 1) exportDialogVisible.value = false
+else if(type == 2) superiorDialogVisible.value = false
+else managerPwdDialogVisible.value = false
+}
+//密码输入完成
+const handleManagerPwd = (boo, pwd) => {
 
+if (pwd) {
+    superiorDialogVisible.value = false
+   
+    //导出
+    exportSubmit(pwd)
+}
 
+}
+
+//提交导出
+const exportSubmit =  async (pwd) => {
+// let obj = JSON.parse(JSON.stringify(queryParams.value))
+let obj = {}
+obj.auditPassword = pwd
+obj.leaderName = superiorName.value
+
+proxy.download("logData/export", obj,`user_danger_${new Date().getTime()}.xlsx`);
+managerPwdDialogVisible.value = false
+}
+getEchartsCountData()
+getEchartsDangerPlepeoData()
 
 
 </script>
