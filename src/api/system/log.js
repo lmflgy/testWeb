@@ -27,9 +27,23 @@ export function getEchartsWarnList(query) {
 	})
 }
 
+// 风险预警列表
+export function getLimitWarnList(query) {
+	return request({
+		url: '/limit/warnList',
+		method: 'get',
+        params: query
+	})
+}
 
-
-
+// 风险预警列表详情
+export function getWarnDetailList(query) {
+	return request({
+		url: '/limit/warnDetail',
+		method: 'get',
+        params: query
+	})
+}
 
 
 

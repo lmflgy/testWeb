@@ -307,17 +307,16 @@ export const disabledPeopleQuery = [
   //风险预警日志 表单查询
   export const riskQuery = [
 	{
-		prop: "relevanceEpId",
-		type: "select",
+		prop: "userName",
+		type: "input",
 		name: "操作员名称：",
-		dict: "sys_authentication",
 		placeholder: "请选择",
 	},
 	{
-		prop: "relevanceEpId",
+		prop: "userType",
 		type: "select",
 		name: "数据来源：",
-		dict: "sys_authentication",
+		dict: "user_type",
 		placeholder: "请选择",
 	},
 	
@@ -325,7 +324,7 @@ export const disabledPeopleQuery = [
   //风险预警日志 表格显示
   export const riskTable = [
 	{
-		prop: "nickName",
+		prop: "userName",
 		type: "input",
 		name: "操作员",
 		placeholder: "请输入",
@@ -346,27 +345,25 @@ export const disabledPeopleQuery = [
 	  width: "180px",
 	},
 	{
-		prop: "relevanceEpId",
+		prop: "name",
+		type: "input",
+		name: "本月操作次数",
+		placeholder: "请输入",
+		width: "180px",
+	  },
+	{
+		prop: "userType",
 		type: "select",
 		name: "数据来源",
-		dict: "sys_authentication",
+		dict: "user_type",
 		placeholder: "请选择",
 		width: "120px",
 	  },
-	
-	// {
-	//   prop: "relevanceEpId",
-	//   type: "select",
-	//   name: "证件类型",
-	//   dict: "with_or_without",
-	//   placeholder: "请选择",
-	//   width: "120px",
-	// },
 	{
-		prop: "relevanceEpId",
+		prop: "warnLevel",
 		type: "select",
 		name: "风险状态",
-		dict: "sys_authentication",
+		dict: "warn_level",
 		placeholder: "请选择",
 		width: "120px",
 	  }
