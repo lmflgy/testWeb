@@ -18,7 +18,7 @@
                 <div class="title">
                     <b>入库日志</b>
                     <div>
-                        <el-date-picker v-model="value1" type="date" placeholder="请选择" format="YYYY/MM/DD" />
+                        <el-date-picker v-model="formData.addCountDate" type="date" placeholder="请选择" format="YYYY/MM/DD" />
                     </div>
                 </div>
 
@@ -129,7 +129,7 @@ import {
 } from './data/index.js'
 const router = useRouter();
 import { ref } from 'vue';
-import { getEchartsCount,getEchartsWarnList} from "@/api/system/log";
+import { getEchartsCount,getEchartsWarnList,getEchartsAllCount} from "@/api/system/log";
 const { sys_authentication,sys_oper_type,user_type,warn_level } = proxy.useDict("sys_authentication","sys_oper_type","user_type","warn_level");
 //页面中用到的字典数据
 const dictData = ref({
@@ -140,6 +140,7 @@ const dictData = ref({
 //shuju
 const formData = ref({
     logCountDate:proxy.getNowDate(1),//日志数量统计
+    addCountDate:proxy.getNowDate(1),//新增操作日志
     platCountDate:proxy.getNowDate(1),//平台操作日志
     echartsArr:['echarts1','echarts2','echarts3','echarts4'],
     myChartArr:['myChart1','myChart2','myChart3','myChart4','myChart5'],
@@ -303,6 +304,37 @@ const fenXianEcharts = () => {
 
 }
 
+//柱状图1 日志数量统计
+const getEchartsAllCountData = async()=>{
+    const res = await getEchartsAllCount({date:formData.value.logCountDate});
+    let dataArr = [[],[]];
+    for(let i = 0; i<res.data.length;i++){
+       dataArr[0].push(res.data[i].name);
+       dataArr[1].push(res.data[i].count);
+      
+    }
+
+
+    setTimeout(()=>{
+        init(0,dataArr)
+    },500);
+}
+
+
+//柱状图2 日志数量统计
+const getEchartsAddCountData = async()=>{
+    const res = await getEchartsAddCount({date:formData.value.addCountDate});
+    let dataArr = [[],[]];
+    for(let i = 0; i<res.data.length;i++){
+       dataArr[0].push(res.data[i].name)
+       dataArr[1].push(res.data[i].count)
+    }
+    setTimeout(()=>{
+        init(0,dataArr)
+    },500)
+}
+
+
 //平台操作日志
 const getEchartsCountData = async()=>{
     const res = await getEchartsCount({date:formData.value.platCountDate})
@@ -367,8 +399,12 @@ obj.leaderName = superiorName.value
 proxy.download("logData/export", obj,`user_danger_${new Date().getTime()}.xlsx`);
 managerPwdDialogVisible.value = false
 }
-getEchartsCountData()
-getEchartsDangerPlepeoData()
+//柱状图1  日志数量统计
+getEchartsAllCountData();
+//柱状图2  入库日志统计
+getEchartsAddCountData();
+getEchartsCountData();
+getEchartsDangerPlepeoData();
 
 
 </script>

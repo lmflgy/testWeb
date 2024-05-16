@@ -27,23 +27,26 @@ export function getEchartsWarnList(query) {
 	})
 }
 
-// 风险预警列表
-export function getLimitWarnList(query) {
+
+// 柱状图1 日志数量统计
+export function getEchartsAllCount(query) {
 	return request({
-		url: '/limit/warnList',
+		url: '/logData/allCount',
 		method: 'get',
         params: query
 	})
 }
 
-// 风险预警列表详情
-export function getWarnDetailList(query) {
+//柱状图2 入库日志统计
+
+export function getEchartsAddCount(query) {
 	return request({
-		url: '/limit/warnDetail',
+		url: '/logData/addCount',
 		method: 'get',
         params: query
 	})
 }
+
 
 
 
