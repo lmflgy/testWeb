@@ -47,6 +47,27 @@ export function getEchartsAddCount(query) {
 	})
 }
 
+//柱状图4 调用日志
+
+export function getEchartsRpcCount(query) {
+	return request({
+		url: '/logData/rpcCount',
+		method: 'get',
+        params: query
+	})
+}
+
+//柱状图5 风险预警
+
+export function getEchartsWarnListData(query) {
+	return request({
+		url: '/logData/warnListData',
+		method: 'get',
+        params: query
+	})
+}
+
+
 
 
 
