@@ -30,8 +30,7 @@
                 <div class="title">
                     <b>平台操作日志</b>
                     <div>
-
-                        <el-date-picker v-model="formData.platCountDate" type="date"  @change="handelSearch(3)" placeholder="请选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+                        <el-date-picker v-model="formData.platCountDate" type="date"  @change="handelSearch(4)" placeholder="请选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
                     </div>
                 </div>
 
@@ -46,7 +45,7 @@
                         <el-select v-model="rpcLog" placeholder="请选择"  @change="handelSearch(4)" clearable>
                             <el-option v-for="dict in dictData.sys_oper_type.filter(x=>x.value==='10' || x.value==='2' || x.value==='3')" :key="dict.value" :label="dict.label"  :value="dict.value" />
                         </el-select>
-                        <el-date-picker v-model="formData.rpcCountDate" type="date"  @change="handelSearch(4)" placeholder="请选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
+                        <el-date-picker v-model="formData.rpcCountDate" type="date"  @change="handelSearch(3)" placeholder="请选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
                     </div>
                 </div>
 
@@ -403,7 +402,7 @@ const getEchartsRpcCountData = async()=>{
 
 //柱状图5 风险预警
 const getEchartsWarnListDataAsync= async()=>{
-    const res = await getEchartsWarnListData({type:2});
+    const res = await getEchartsWarnListData({type:warnLog.value});
     let dataArr = [[],[],[],[]]
     for(let i = 0; i<user_type.value.length;i++){
         let dict = user_type.value[i];

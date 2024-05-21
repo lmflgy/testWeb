@@ -1,29 +1,16 @@
 //入库日志表单查询
 export const dictQuery = [
 	{
-	  prop: "name",
+	  prop: "creater",
 	  type: "input",
-	  name: "用户名称：",
-	  placeholder: "请输入",
+	  name: "操作员：",
+	  placeholder: "请输入操作员",
 	},
 	{
-	  prop: "idNumber",
-	  type: "input",
-	  name: "证件号：",
-	  placeholder: "请输入",
-	},
-	{
-	  prop: "relevanceEpId",
-	  type: "select",
-	  name: "证件类型：",
-	  dict: "sys_authentication",
-	  placeholder: "请选择",
-	},
-	{
-	  prop: "relevanceEpId",
+	  prop: "type",
 	  type: "select",
 	  name: "操作类型：",
-	  dict: "with_or_without",
+	  dict: "sys_opt_type",
 	  placeholder: "请选择",
 	},
 	{
@@ -35,83 +22,33 @@ export const dictQuery = [
   ];
   //入库日志表格显示
   export const dictTable = [
-	
 	{
-	  prop: "name",
-	  type: "input",
-	  name: "操作员号",
-	  placeholder: "请输入",
-	  width: "180px",
-	},
-	{
-		prop: "name",
+		prop: "creater",
 		type: "input",
-		name: "用户名称",
-		placeholder: "请输入",
+		name: "操作人员",
 		width: "180px",
 	  },
 	
 	{
-		prop: "relevanceEpId",
-		type: "select",
-		name: "操作来源",
-		dict: "sys_authentication",
-		placeholder: "请选择",
-		width: "120px",
-	  },
-	  {
-		prop: "relevanceEpId",
-		type: "select",
-		name: "操作类型",
-		dict: "sys_authentication",
-		placeholder: "请选择",
-		width: "120px",
-	  },
-	  {
-		prop: "name",
+		prop: "count",
 		type: "input",
 		name: "操作条数",
-		placeholder: "请输入",
-		width: "180px",
+		width: "120px",
 	  },
 	  {
-		prop: "relevanceEpId",
+		prop: "type",
 		type: "select",
-		name: "数据的来源",
-		dict: "sys_authentication",
+		name: "操作类型",
+		dict: "sys_opt_type",
 		placeholder: "请选择",
 		width: "120px",
 	  },
-	{
-	  prop: "phone",
-	  type: "input",
-	  name: "入库时间",
-	  placeholder: "请输入",
-	  width: "180px",
-	},
-	
-	{
-	  prop: "relevanceEpId",
-	  type: "dataList",
-	  name: "入库结果",
-	  dict: "sys_authentication",
-	  placeholder: "请选择",
-	  width: "120px",
-	},
-	{
-	  prop: "emergencyContact",
-	  type: "input",
-	  name: "结果原因",
-	  placeholder: "请输入",
-	  width: "120px",
-	},
-	{
-	  prop: "emergencyContact",
-	  type: "input",
-	  name: "日志内容",
-	  placeholder: "请输入",
-	  width: "120px",
-	}
+	  {
+		prop: "createTime",
+		type: "input",
+		name: "操作时间",
+		width: "180px",
+	  }
   ];
 
   //平台操作日志 表单查询
@@ -197,15 +134,21 @@ export const disabledPeopleQuery = [
   //三方调用日志 表单查询
   export const threeQuery = [
 	{
-		prop: "relevanceEpId",
+		prop: "businessType",
 		type: "select",
 		name: "类型查询：",
-		dict: "sys_authentication",
+		dict: "sys_oper_type",
+		placeholder: "请选择",
+	},{
+		prop: "operatorType",
+		type: "select",
+		name: "系统来源查询：",
+		dict: "user_type",
 		placeholder: "请选择",
 	},
 	{
 	  prop: "name",
-	  type: "date",
+	  type: "datetimerange",
 	  name: "时间段查询：",
 	  placeholder: "请输入",
 	},
@@ -214,95 +157,53 @@ export const disabledPeopleQuery = [
   //三方调用日志 表格显示
   export const threeTable = [
 	{
-		prop: "name",
+		prop: "businessType",
 		type: "input",
-		name: "调用请求",
+		name: "操作类型",
 		placeholder: "请输入",
 		width: "180px",
 	  },
 	  {
-		prop: "name",
+		prop: "count",
 		type: "input",
-		name: "参数",
+		name: "操作数量",
 		placeholder: "请输入",
 		width: "180px",
 	  },
 	{
-		prop: "relevanceEpId",
-		type: "select",
-		name: "返回结果",
-		dict: "sys_authentication",
-		placeholder: "请选择",
-		width: "120px",
-	  },
-	{
-	  prop: "name",
+	  prop: "operName",
 	  type: "input",
-	  name: "事件时间戳",
+	  name: "操作员",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
 	{
-		prop: "name",
-		type: "input",
-		name: "入库数据量",
+		prop: "operTime",
+		type: "time",
+		name: "操作时间",
 		placeholder: "请输入",
 		width: "180px",
 	  },
 	{
-		prop: "relevanceEpId",
+		prop: "operatorType",
 		type: "select",
-		name: "事件类型",
-		dict: "sys_authentication",
-		placeholder: "请选择",
-		width: "120px",
-	  },
-	  
-	{
-	  prop: "name",
-	  type: "input",
-	  name: "事件描述",
-	  placeholder: "请输入",
-	  width: "180px",
-	},
-	// {
-	//   prop: "relevanceEpId",
-	//   type: "select",
-	//   name: "证件类型",
-	//   dict: "with_or_without",
-	//   placeholder: "请选择",
-	//   width: "120px",
-	// },
-	{
-		prop: "relevanceEpId",
-		type: "select",
-		name: "状态",
-		dict: "sys_authentication",
+		name: "系统来源",
+		dict: "user_type",
 		placeholder: "请选择",
 		width: "120px",
 	  },
 	{
-	  prop: "idNumber",
+	  prop: "tellerld",
 	  type: "input",
-	  name: "错误消息",
-	  placeholder: "请输入",
+	  name: "外部系统ID",
 	  width: "180px",
 	},
 	{
-		prop: "idNumber",
+		prop: "userId",
 		type: "input",
-		name: "操作人",
-		placeholder: "请输入",
-		width: "180px",
-	  },
-	{
-		prop: "relevanceEpId",
-		type: "select",
-		name: "操作类型",
-		dict: "sys_authentication",
-		placeholder: "请选择",
+		name: "操作用户ID",
 		width: "120px",
-	  }
+	  },
   ];
   //风险预警日志 表单查询
   export const riskQuery = [

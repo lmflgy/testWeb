@@ -15,13 +15,15 @@
                         <el-select v-if="item.type == 'select'" v-model="queryParams[item.prop]"
                             :placeholder="item.placeholder" clearable>
                             <el-option v-for="dict in dictData[item.dict]" :key="dict.value" :label="dict.label"
-                                :value="dict.value" />
+                                :value="dict.value"  >
+                               
+                            </el-option>
                         </el-select>
                         <!-- 单个日期选择 -->
                         <el-date-picker v-if="item.type == 'date'" v-model="queryParams[item.prop]" type="date"
                             :placeholder="item.placeholder" value-format="YYYY-MM-DD" />
                         <!-- 时间段 日期选择 -->
-                        <el-date-picker v-if="item.type == 'datetimerange'" v-model="queryParams[item.prop]"
+                        <el-date-picker v-if="item.type == 'datetimerange'" v-model="dateRange"
                             value-format="YYYY-MM-DD" type="daterange" range-separator="-" start-placeholder="开始日期"
                             end-placeholder="结束日期"></el-date-picker>
                     </el-form-item>
@@ -87,16 +89,20 @@ import {
 } from './data/index.js'
 import { ref } from 'vue';
 import exportDialog from '@/components/exportDialog';
-const { sys_authentication } = proxy.useDict("sys_authentication");
+import { getRpcLogDataList } from "@/api/system/log";
+
+const { sys_oper_type,user_type } = proxy.useDict("sys_oper_type","user_type");
 //页面中用到的字典数据
 const dictData = ref({
-    sys_authentication: sys_authentication
+    sys_oper_type:sys_oper_type,
+    user_type: user_type
 })
 //查询表单
 const queryParams = ref({
     pageNum: 1,
     pageSize: 10
 });
+const dateRange = ref([]);
 //数据列表
 const tableData = ref([{}]);
 const total = ref(10);
@@ -107,11 +113,15 @@ const exportDialogVisible = ref(false)
 
 //查询 列表数据
 const getList = () => {
-
+    getRpcLogDataList(proxy.addDateRange(queryParams.value, dateRange.value,"myself")).then((res) => {
+        tableData.value = res.rows
+        total.value = res.total
+    })
 }
 //点击 查询 按钮
 const handleQuery = () => {
 
+    getList();
 }
 //点击 重置 按钮
 const resetQuery = () => {
@@ -135,6 +145,7 @@ const handleDel = () => {
 
         })
         .catch(() => { });
+    getList();
 }
 //点击 修改和详情 1==详情 2==修改
 const handleMeg = (row,type) => {
@@ -154,5 +165,8 @@ const handleExport = (boo)=>{
 const handleSelectionChange = ()=>{
 
 }
+
+//初始化查询
+getList();
 </script>
 <style lang="scss" scoped></style>
