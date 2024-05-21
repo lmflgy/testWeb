@@ -62,7 +62,7 @@ export function addDateRange(params, dateRange, propName) {
     search.params['beginTime'] = dateRange[0];
     search.params['endTime'] = dateRange[1];
   }
-  else if(propName==="myself"){
+  else if(propName==="myself" && dateRange.length>0){
     search['startTime'] = dateRange[0]+" 00:00:00";
     search['endTime'] = dateRange[1]+" 23:59:59";
   } 

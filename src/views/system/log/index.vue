@@ -72,8 +72,7 @@
         <!-- 导出 -->
         <exportDialog :dialogVisible="exportDialogVisible" introduce="按用户入库时间导出" @closes="handleExportFinash" @cancel="cancelDialog"></exportDialog>
         <!-- 上级审核人 -->
-        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" @cancel="cancelDialog" :title="titleDialog">
-        </SuperiorDialog>
+        <SuperiorDialog :dialogVisible="superiorDialogVisible" @closes="handleSuperior" @cancel="cancelDialog" :title="titleDialog"></SuperiorDialog>
         <!-- 审核密码 -->
         <ManagerPwdDialog :dialogVisible="managerPwdDialogVisible" @closes="handleManagerPwd" @cancel="cancelDialog"></ManagerPwdDialog>
     </div>
@@ -218,10 +217,10 @@ const exportSubmit =  async (pwd) => {
     let obj = JSON.parse(JSON.stringify(queryParams.value))
     obj.auditPassword = pwd
     obj.leaderName = superiorName.value
-    obj.startTime = exportDate.value[0]
-    obj.endTime = exportDate.value[1]
+    obj.startTime = exportDate.value[0]+" 00:00:00";
+    obj.endTime = exportDate.value[1]+" 23:59:59";
 	
-    proxy.download("zuser/export", obj,`user_${new Date().getTime()}.xlsx`);
+    proxy.download("dis/log/export", obj,`importlog_${new Date().getTime()}.xlsx`);
 }
 //选中
 const handleSelectionChange = ()=>{
