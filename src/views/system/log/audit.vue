@@ -30,7 +30,6 @@
                 <div class="title">
                     <b>平台操作日志</b>
                     <div>
-
                         <el-date-picker v-model="formData.platCountDate" type="date"  @change="handelSearch(4)" placeholder="请选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
                     </div>
                 </div>
