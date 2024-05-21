@@ -1,6 +1,6 @@
 import request from '@/utils/request'
 
-// 查询 平台操作日志
+//列表 查询 平台操作日志
 export function getOperlogList(query) {
 	return request({
 		url: '/monitor/operlog/list',
@@ -18,6 +18,14 @@ export function getAddLogList(query) {
 	})
 }
 
+//列表 查询 第三方调用日志
+export function getRpcLogDataList(query) {
+	return request({
+		url: '/logData/rpcList',
+		method: 'get',
+		params: query
+	})
+}
 
 // 风险人员列表
 export function getEchartsWarnList(query) {
