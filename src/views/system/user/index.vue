@@ -278,6 +278,26 @@
                </el-col>
             </el-row>
             <el-row>
+               <el-col :span="12">
+                  <el-form-item label="上级用户">
+                     <el-select v-model="form.postIds" multiple placeholder="请选择">
+                        <el-option
+                           v-for="item in postOptions"
+                           :key="item.postId"
+                           :label="item.postName"
+                           :value="item.postId"
+                           :disabled="item.status == 1"
+                        ></el-option>
+                     </el-select>
+                  </el-form-item>
+               </el-col>
+               <el-col :span="12">
+                  <el-form-item label="审核密码" prop="auditPassword">
+                     <el-input v-model="form.auditPassword" placeholder="请输入审核密码" maxlength="50" />
+                  </el-form-item>
+               </el-col>
+            </el-row>
+            <el-row>
                <el-col :span="24">
                   <el-form-item label="备注">
                      <el-input v-model="form.remark" type="textarea" placeholder="请输入内容"></el-input>
