@@ -5,7 +5,7 @@
                 <div class="title">
                     <b>日志数量统计</b>
                     <div>
-                        <el-date-picker v-model="formData.logCountDate" type="date" placeholder="请选择" format="YYYY-MM-DD" :clearable="false"/>
+                        <el-date-picker v-model="formData.logCountDate" type="date" @change="handelSearch(1)" placeholder="请选择" format="YYYY-MM-DD"   value-format="YYYY-MM-DD" :clearable="false"/>
                     </div>
                 </div>
 
@@ -18,7 +18,7 @@
                 <div class="title">
                     <b>入库日志</b>
                     <div>
-                        <el-date-picker v-model="formData.addCountDate" type="date" placeholder="请选择" format="YYYY/MM/DD" />
+                        <el-date-picker v-model="formData.addCountDate" type="date"  @change="handelSearch(2)" placeholder="请选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
                     </div>
                 </div>
 
@@ -31,7 +31,7 @@
                     <b>平台操作日志</b>
                     <div>
 
-                        <el-date-picker v-model="formData.platCountDate" type="date" placeholder="请选择" format="YYYY/MM/DD" />
+                        <el-date-picker v-model="formData.platCountDate" type="date"  @change="handelSearch(3)" placeholder="请选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
                     </div>
                 </div>
 
@@ -43,11 +43,10 @@
                 <div class="title">
                     <b>调用日志</b>
                     <div class="two">
-                        <el-select v-model="platLog" placeholder="请选择" clearable>
-                            <el-option v-for="dict in dictData.sys_authentication" :key="dict.value" :label="dict.label"
-                                :value="dict.value" />
+                        <el-select v-model="rpcLog" placeholder="请选择"  @change="handelSearch(4)" clearable>
+                            <el-option v-for="dict in dictData.sys_oper_type.filter(x=>x.value==='10' || x.value==='2' || x.value==='3')" :key="dict.value" :label="dict.label"  :value="dict.value" />
                         </el-select>
-                        <el-date-picker v-model="value1" type="date" placeholder="请选择" format="YYYY/MM/DD" />
+                        <el-date-picker v-model="formData.rpcCountDate" type="date"  @change="handelSearch(4)" placeholder="请选择" format="YYYY-MM-DD" value-format="YYYY-MM-DD"/>
                     </div>
                 </div>
 
@@ -62,9 +61,10 @@
                     <div class="title">
                         <b>风险预警</b>
                         <div class="two">
-                            <el-select v-model="platLog" placeholder="请选择" clearable>
-                                <el-option v-for="dict in dictData.sys_authentication" :key="dict.value"
-                                    :label="dict.label" :value="dict.value" />
+                            <el-select v-model="warnLog"  @change="handelSearch(5)" placeholder="请选择" clearable>
+                                <el-option key="0" label="今日" value="0" />  
+                                <el-option key="1" label="本周" value="1" />  
+                                <el-option key="2" label="本月" value="2" />  
                             </el-select>
 
                         </div>
@@ -129,19 +129,21 @@ import {
 } from './data/index.js'
 const router = useRouter();
 import { ref } from 'vue';
-import { getEchartsCount,getEchartsWarnList,getEchartsAllCount} from "@/api/system/log";
-const { sys_authentication,sys_oper_type,user_type,warn_level } = proxy.useDict("sys_authentication","sys_oper_type","user_type","warn_level");
+import { getEchartsCount,getEchartsWarnList,getEchartsAllCount,getEchartsAddCount,getEchartsRpcCount,getEchartsWarnListData} from "@/api/system/log";
+const { sys_authentication,sys_oper_type,user_type,warn_level,echart_oper_type } = proxy.useDict("sys_authentication","sys_oper_type","user_type","warn_level");
 //页面中用到的字典数据
 const dictData = ref({
     sys_authentication: sys_authentication,
     warn_level:warn_level,
-    user_type:user_type
+    user_type:user_type,
+    sys_oper_type:sys_oper_type
 })
 //shuju
 const formData = ref({
     logCountDate:proxy.getNowDate(1),//日志数量统计
     addCountDate:proxy.getNowDate(1),//新增操作日志
     platCountDate:proxy.getNowDate(1),//平台操作日志
+    rpcCountDate:proxy.getNowDate(1),//调用日志
     echartsArr:['echarts1','echarts2','echarts3','echarts4'],
     myChartArr:['myChart1','myChart2','myChart3','myChart4','myChart5'],
     myChart1:null,
@@ -163,11 +165,15 @@ const superiorDialogVisible = ref(false)
 //输入密码弹框
 const managerPwdDialogVisible = ref(false)
 
+//调用日志下拉
+const rpcLog = ref('')
 //平台日志下拉
 const platLog = ref('')
+//风险预警
+const warnLog = ref('')
 const tableData = ref([]);
 onMounted(() => {
-   
+    console.log(sys_oper_type)
     setTimeout(() => {
         // fenXianEcharts('echarts2', 1)
     }, 2000)
@@ -177,6 +183,8 @@ onMounted(() => {
     // setTimeout(()=>{
     //     init('echarts4',4)
     // },4000)
+
+    
 })
 
 const init = (index,data) => {
@@ -214,34 +222,40 @@ const init = (index,data) => {
         })
 }
 
-const fenXianEcharts = () => {
-    myChart5.value = echarts.init(document.getElementById('echarts5'));
-    myChart5.value.setOption(
+const fenXianEcharts = (index,data) => {
+    formData.value[formData.value.myChartArr[index]]= echarts.init(document.getElementById('echarts5'));
+
+    let echartSeries=[];
+    let echartX=[];
+    
+    formData.value[formData.value.myChartArr[index]].setOption(
         {
             legend: {
                 show: true,
-            right: '10%',
-            top: 2,
-            icon: 'rect',
-            itemWidth: 10,
-            itemHeight: 4,
-            textStyle: {
-                color: '#1a1a1a',
-                fontSize: 12,
+                right: '10%',
+                top: 2,
+                icon: 'rect',
+                itemWidth: 10,
+                itemHeight: 4,
+                textStyle: {
+                    color: '#1a1a1a',
+                    fontSize: 12,
+                },
+                data: ['低风险人数', '中风险人数', '高风险人数']
             },
-            name:['入库日志', '平台操作日志', '第三方调用日志']
-  },
             xAxis: {
                 type: 'category',
-                data: ['入库日志', '平台操作日志', '第三方调用日志']
+                data: data[0]
             },
             yAxis: {
-                type: 'value'
+                type: 'value',
+                max: function (value) {    return value.max + 5;}
             },
             series: [
                 {
-                    name:'入库日志',
-                    data: [120, 200, 150],
+                    name:'低风险人数',
+                    test:'1',
+                    data: data[1],
                     type: 'bar',
                     itemStyle: {
                         borderRadius: [5, 5, 0, 0], //（顺时针左上，右上，右下，左下）
@@ -260,8 +274,8 @@ const fenXianEcharts = () => {
                     barWidth: '20'
                 },
                 {
-                    name:'平台操作日志',
-                    data: [120, 200, 150],
+                    name:'中风险人数',
+                    data: data[2],
                     type: 'bar',
                     itemStyle: {
                         borderRadius: [5, 5, 0, 0], //（顺时针左上，右上，右下，左下）
@@ -280,8 +294,8 @@ const fenXianEcharts = () => {
                     barWidth: '20'
                 },
                 {
-                    name:'第三方调用日志',
-                    data: [120, 200, 150],
+                    name:'高风险人数',
+                    data: data[3],
                     type: 'bar',
                     itemStyle: {
                         borderRadius: [5, 5, 0, 0], //（顺时针左上，右上，右下，左下）
@@ -306,15 +320,13 @@ const fenXianEcharts = () => {
 
 //柱状图1 日志数量统计
 const getEchartsAllCountData = async()=>{
+    console.log(formData.value.logCountDate)
     const res = await getEchartsAllCount({date:formData.value.logCountDate});
     let dataArr = [[],[]];
     for(let i = 0; i<res.data.length;i++){
        dataArr[0].push(res.data[i].name);
        dataArr[1].push(res.data[i].count);
-      
     }
-
-
     setTimeout(()=>{
         init(0,dataArr)
     },500);
@@ -323,14 +335,33 @@ const getEchartsAllCountData = async()=>{
 
 //柱状图2 日志数量统计
 const getEchartsAddCountData = async()=>{
+    //后端无字典接口手动定义
+    let dataType=[{1:"残疾人"},{2:"黑名单"}];
     const res = await getEchartsAddCount({date:formData.value.addCountDate});
     let dataArr = [[],[]];
+    dataArr[0].push('残疾人');
+    dataArr[0].push('黑名单');
     for(let i = 0; i<res.data.length;i++){
-       dataArr[0].push(res.data[i].name)
-       dataArr[1].push(res.data[i].count)
+        if(res.data[i]==undefined || res.data[i].type==undefined || res.data[i].count==undefined){
+            dataArr[1] = [0,0];
+            continue;
+        }
+        let value = res.data[i].count;
+        if(!isNaN(value) && typeof(value)=== 'number' ){
+            if(res.data[i].type===1 ){
+                dataArr[1].push(res.data[i].count);
+            }
+            else if(res.data[i].type===2){
+                dataArr[1].push(res.data[i].count);
+            }
+            else{
+                dataArr[1].push(0);
+            }
+        }
+        
     }
     setTimeout(()=>{
-        init(0,dataArr)
+        init(1,dataArr)
     },500)
 }
 
@@ -342,16 +373,70 @@ const getEchartsCountData = async()=>{
     for(let i = 0; i<sys_oper_type.value.length;i++){
        let dict = sys_oper_type.value[i]
        dataArr[0].push(dict.label)
-       dataArr[1].push(0)
-       for(let k = 0; k<res.data.length;k++){
-        if(dict.value == res.data[k].businessType)  dataArr[1][dataArr[1].length-1]=(res.data[k].count)
+       let resItem=res.data.find(item => item.businessType.toString() === dict.value.toString());
+       dataArr[1].push(resItem==undefined? 0: resItem.count)
+    //    for(let k = 0; k<res.data.length;k++){
+    //     if(dict.value == res.data[k].businessType)  dataArr[1][dataArr[1].length-1]=(res.data[k].count)
         
-       }
+    //    }
     }
     setTimeout(()=>{
         init(2,dataArr)
     },500)
 }
+
+//柱状图4 调用日志
+const getEchartsRpcCountData = async()=>{
+    const res = await getEchartsRpcCount({date:formData.value.rpcCountDate,businessType:rpcLog.value});
+    let dataArr = [[],[]];
+    for(let i = 0; i<user_type.value.length;i++){
+       let dict = user_type.value[i];
+       if(dict.value ==="00") continue;
+       let resItem=res.data.find(item => item.operatorType === dict.value);
+       dataArr[0].push(dict.label)
+       dataArr[1].push(resItem==undefined? 0: resItem.operCount)
+    }
+    setTimeout(()=>{
+        init(3,dataArr)
+    },500);
+}
+
+//柱状图5 风险预警
+const getEchartsWarnListDataAsync= async()=>{
+    const res = await getEchartsWarnListData({type:2});
+    let dataArr = [[],[],[],[]]
+    for(let i = 0; i<user_type.value.length;i++){
+        let dict = user_type.value[i];
+        let resItem=res.data.find(item => item.source === dict.value);
+        dataArr[0].push(dict.label);
+
+        //这一项没有或者这一项的值没有则全部为0
+        if(resItem==undefined || resItem.value==undefined || resItem.value.length==0)
+        {
+            dataArr[1].push(0);
+            dataArr[2].push(0);
+            dataArr[3].push(0);
+            continue;
+        }
+        let resValue=resItem.value;
+        // level=1=》 低风险人数 level=2=》中风险人数 level=3=》高风险人数
+        for(let k = 0; k<3;k++){
+            if  (resValue[k]==undefined) {
+                dataArr[k+1].push(0);
+                continue;
+            }
+            if  (resValue[k].level == 1) dataArr[k+1].push(resValue[k].count);
+            else if  (resValue[k].level == 2) dataArr[k+1].push(resValue[k].count);
+            else if  (resValue[k].level == 3) dataArr[k+1].push(resValue[k].count);
+            else dataArr[k+1].push(0);
+        }
+    }
+    
+    setTimeout(()=>{
+        fenXianEcharts(4,dataArr)
+    },500);
+}
+
 //风险人员
 const getEchartsDangerPlepeoData = async()=>{
     const res = await getEchartsWarnList({date:proxy.getNowDate(1)})
@@ -361,6 +446,27 @@ const getEchartsDangerPlepeoData = async()=>{
 const handleExport = (boo) => {
     superiorDialogVisible.value = boo
 
+}
+const handelSearch=(value)=>{
+    if(value == 1){
+        //柱状图1  日志数量统计
+        getEchartsAllCountData();
+    }
+    if(value == 2){
+        //柱状图2  入库日志统计
+        getEchartsAddCountData();
+    }
+    if(value == 3){
+        //柱状图3  调用日志
+        getEchartsRpcCountData();
+    }
+    if(value == 4){
+        getEchartsCountData();
+    }
+    if(value == 5){
+        //柱状图5  风险预警
+        getEchartsWarnListDataAsync();
+    }
 }
 //选择上级完成
 const handleSuperior = (boo, userId) => {
@@ -399,10 +505,22 @@ obj.leaderName = superiorName.value
 proxy.download("logData/export", obj,`user_danger_${new Date().getTime()}.xlsx`);
 managerPwdDialogVisible.value = false
 }
+
+//初始化下拉选择框默认值
+const initSelect = (data) => {
+    rpcLog.value='2';
+    warnLog.value='0';
+}
+
+initSelect();
 //柱状图1  日志数量统计
 getEchartsAllCountData();
 //柱状图2  入库日志统计
 getEchartsAddCountData();
+//柱状图3  调用日志
+getEchartsRpcCountData();
+//柱状图5  风险预警
+getEchartsWarnListDataAsync();
 getEchartsCountData();
 getEchartsDangerPlepeoData();
 
