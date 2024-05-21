@@ -9,14 +9,15 @@ export function getOperlogList(query) {
 	})
 }
 
-// 日志数量统计
-export function getEchartsCount(query) {
+//列表 查询 入库日志列表
+export function getAddLogList(query) {
 	return request({
-		url: '/logData/count',
+		url: '/logData/addList',
 		method: 'get',
-        params: query
+		params: query
 	})
 }
+
 
 // 风险人员列表
 export function getEchartsWarnList(query) {
@@ -46,6 +47,16 @@ export function getEchartsAddCount(query) {
         params: query
 	})
 }
+
+// 柱状图3 平台操作日志
+export function getEchartsCount(query) {
+	return request({
+		url: '/logData/count',
+		method: 'get',
+        params: query
+	})
+}
+
 
 //柱状图4 调用日志
 
