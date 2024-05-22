@@ -37,25 +37,52 @@
                     :align="publicConfigStore.tableAlign"></el-table-column>
                 <el-table-column label="记录时间" :show-overflow-tooltip="true" prop="countTime"
                     :align="publicConfigStore.tableAlign"></el-table-column>
-                <el-table-column :label="selectTotal"  :show-overflow-tooltip="true" prop="selectNum"
-                    :align="publicConfigStore.tableAlign">
-                    <template #default="scope">
 
-                        <!-- <span :class="[scope.row.data.TODAY[0].isBig ? 'red' : '']"> -->
-                        <span>
-                            {{ scope.row.aa }}
-                        </span>
-                        <span>
 
-                        </span>
-                    </template>
-                </el-table-column>
-                <el-table-column :label="updateTotal" :show-overflow-tooltip="true" prop="updateNum"
-                    :align="publicConfigStore.tableAlign"></el-table-column>
-                <el-table-column :label="deleteTotal" :show-overflow-tooltip="true" prop="deleteNum"
-                    :align="publicConfigStore.tableAlign"></el-table-column>
-                <el-table-column :label="exportTotal" :show-overflow-tooltip="true" prop="exportNum"
-                    :align="publicConfigStore.tableAlign"></el-table-column>
+                    <el-table-column :label="selectTotal" :show-overflow-tooltip="true" prop="MONTH"
+                        :align="publicConfigStore.tableAlign" min-width='150px'>
+                        <template #default="scope">
+                            <div class="tag-dict">
+                                <span :class="[scope.row.selectIsBig ? 'red' : '']">
+                                
+                                    {{ scope.row.selectNum }}次{{scope.row.selectIsBig ? '(超过阈值)' : '' }}
+                                </span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="updateTotal" :show-overflow-tooltip="true" prop="MONTH"
+                        :align="publicConfigStore.tableAlign" min-width='150px'>
+                        <template #default="scope">
+                            <div class="tag-dict">
+                                <span :class="[scope.row.updateIsBig ? 'red' : '']">
+                                
+                                    {{ scope.row.updateNum }}次{{scope.row.updateIsBig ? '(超过阈值)' : '' }}
+                                </span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="deleteTotal" :show-overflow-tooltip="true" prop="MONTH"
+                        :align="publicConfigStore.tableAlign" min-width='150px'>
+                        <template #default="scope">
+                            <div class="tag-dict">
+                                <span :class="[scope.row.deleteIsBig ? 'red' : '']">
+                                
+                                    {{ scope.row.deleteNum }}次{{scope.row.deleteIsBig ? '(超过阈值)' : '' }}
+                                </span>
+                            </div>
+                        </template>
+                    </el-table-column>
+                    <el-table-column :label="exportTotal" :show-overflow-tooltip="true" prop="MONTH"
+                        :align="publicConfigStore.tableAlign" min-width='150px'>
+                        <template #default="scope">
+                            <div class="tag-dict">
+                                <span :class="[scope.row.exportIsBig ? 'red' : '']">
+                                
+                                    {{ scope.row.exportNum }}次{{scope.row.exportIsBig ? '(超过阈值)' : '' }}
+                                </span>
+                            </div>
+                        </template>
+                    </el-table-column>
 
 
             </el-table>
