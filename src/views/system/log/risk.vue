@@ -41,10 +41,14 @@
             <div class="">
                 <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
                     <el-tab-pane label="外部系统" name="name1">
-                      <risk-out ref="riskOutRef"></risk-out>
+                        <risk-out ref="riskOutRef"></risk-out>
                     </el-tab-pane>
-                    <el-tab-pane label="内部系统" name="name2">内部系统</el-tab-pane>
-                    <el-tab-pane label="操作用户" name="name3">操作用户</el-tab-pane>
+                    <el-tab-pane label="内部系统" name="name2">
+                        <risk-inside ref="riskInsideRef"></risk-inside>
+                    </el-tab-pane>
+                    <el-tab-pane label="操作用户" name="name3">
+                        <risk-user ref="riskUserRef"></risk-user>
+                    </el-tab-pane>
                 </el-tabs>
             </div>
 
@@ -65,8 +69,10 @@ import {
     riskTable
 } from './data/index.js'
 import { ref } from 'vue';
-import { getLimitWarnList } from "@/api/system/log";
+// import { getLimitWarnList } from "@/api/system/log";
 import RiskOut from './compnents/riskOut.vue'
+import RiskInside from './compnents/riskInside.vue'
+import RiskUser from './compnents/riskUser.vue'
 const { sys_authentication,user_type } = proxy.useDict("sys_authentication","user_type");
 //页面中用到的字典数据
 const dictData = ref({
@@ -89,19 +95,15 @@ const exportDialogVisible = ref(false)
 
 //查询 列表数据
 const getList = () => {
-    getLimitWarnList(queryParams.value).then((res) => {
-        tableData.value = res.rows
-        total.value = res.total
-    })
+
 }
 //点击 查询 按钮
 const handleQueryParent = () => {
     queryParams.value.pageNum = 1;
-        queryParams.value.pageSize = 10;
+    queryParams.value.pageSize = 10;
     if(activeName.value == 'name1') proxy.$refs["riskOutRef"].handleQuery(JSON.parse(JSON.stringify(queryParams.value)));
-    // if(activeName.value == 'name2') proxy.$refs["riskOutRef"].riskOutRef(JSON.parse(JSON.stringify(queryParams.value)))
-    // if(activeName.value == 'name3') proxy.$refs["riskOutRef"].riskOutRef(JSON.parse(JSON.stringify(queryParams.value)))
-    
+    if(activeName.value == 'name2') proxy.$refs["riskInsideRef"].handleQuery(JSON.parse(JSON.stringify(queryParams.value)))
+    if(activeName.value == 'name3') proxy.$refs["riskUserRef"].handleQuery(JSON.parse(JSON.stringify(queryParams.value)))
 }
 
 //点击 重置 按钮
@@ -145,6 +147,5 @@ const handleExport = (boo) => {
 const handleSelectionChange = () => {
 
 }
-getList()
 </script>
 <style lang="scss" scoped></style>

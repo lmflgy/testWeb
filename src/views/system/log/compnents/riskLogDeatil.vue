@@ -37,7 +37,7 @@
                     :align="publicConfigStore.tableAlign"></el-table-column>
                 <el-table-column label="记录时间" :show-overflow-tooltip="true" prop="countTime"
                     :align="publicConfigStore.tableAlign"></el-table-column>
-                <el-table-column label="新增操作次数（共3231）" :show-overflow-tooltip="true" prop="userName"
+                <el-table-column :label="selectTotal"  :show-overflow-tooltip="true" prop="selectNum"
                     :align="publicConfigStore.tableAlign">
                     <template #default="scope">
 
@@ -50,11 +50,11 @@
                         </span>
                     </template>
                 </el-table-column>
-                <el-table-column label="修改操作次数（共3231）" :show-overflow-tooltip="true" prop="updateNum"
+                <el-table-column :label="updateTotal" :show-overflow-tooltip="true" prop="updateNum"
                     :align="publicConfigStore.tableAlign"></el-table-column>
-                <el-table-column label="删除操作次数（共1231）" :show-overflow-tooltip="true" prop="userName"
+                <el-table-column :label="deleteTotal" :show-overflow-tooltip="true" prop="deleteNum"
                     :align="publicConfigStore.tableAlign"></el-table-column>
-                <el-table-column label="导出操作次数（共1231）" :show-overflow-tooltip="true" prop="exportNum"
+                <el-table-column :label="exportTotal" :show-overflow-tooltip="true" prop="exportNum"
                     :align="publicConfigStore.tableAlign"></el-table-column>
 
 
@@ -104,6 +104,11 @@ const queryParams = ref({
 //数据列表
 const tableData = ref([]);
 const total = ref(0);
+//表头统计
+const selectTotal = ref('查询操作次数');
+const updateTotal = ref('修改操作次数');
+const deleteTotal = ref('删除操作次数');
+const exportTotal = ref('导出操作次数');
 //当前选中的导出时间
 const exportDate = ref([])
 
@@ -130,6 +135,7 @@ const getList = () => {
     getWarnDetailList(queryParams.value).then((res) => {
         tableData.value = res.rows
         total.value = res.total
+        selectTotal.value="查询操作次数（共）";
     })
 }
 //点击 查询 按钮
