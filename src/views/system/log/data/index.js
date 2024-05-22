@@ -137,7 +137,7 @@ export const disabledPeopleQuery = [
 		prop: "businessType",
 		type: "select",
 		name: "类型查询：",
-		dict: "sys_oper_type",
+		dict: "sys_oper_type_three",
 		placeholder: "请选择",
 	},{
 		prop: "operatorType",
