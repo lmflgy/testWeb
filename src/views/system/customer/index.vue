@@ -183,7 +183,7 @@ const handleMeg = (row, type) => {
     router.push({
         path: "/customer/customerEdit",
         query: {
-            id: 1,
+            id: row.id,
             type: type
         }
     })

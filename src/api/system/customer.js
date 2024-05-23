@@ -79,3 +79,11 @@ export function importData(data) {
     data: data
   })
 }
+
+//客户详情接口
+export function getZUserInfo(query) {
+  return request({
+    url: '/zuser/'+query,
+    method: 'get'
+  })
+}
