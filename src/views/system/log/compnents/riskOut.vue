@@ -61,7 +61,7 @@
                     </div>
                 </template>
             </el-table-column>
-            <el-table-column label="数据来源" :show-overflow-tooltip="true" prop="userName"
+            <el-table-column label="数据来源" :show-overflow-tooltip="true" prop="userType"
                 :align="publicConfigStore.tableAlign">
                 <template #default="scope">
                     <dict-tag :options="dictData.user_type" :value="scope.row.userType" />
@@ -142,10 +142,11 @@ const resetQuery = () => {
 
 //点击 修改和详情 1==外部详情 2==内部详情
 const handleMeg = (row, type) => {
+    if (row ===undefined)return;
     router.push({
         path: "/log/riskLogDeatil",
         query: {
-            id: 1,
+            id: row.userId,
             type: 1,
             userId:row.userId,
             name:row.userName

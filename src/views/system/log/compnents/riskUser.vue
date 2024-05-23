@@ -19,45 +19,60 @@
             <el-table-column label="本日操作次数" :show-overflow-tooltip="true" prop="TODAY"
                 :align="publicConfigStore.tableAlign" min-width='150px'>
                 <template #default="scope">
-                    <div class="tag-dict">
+                    <div v-if="scope.row.data!=undefined && Object.keys(scope.row.data).length != 0" class="tag-dict">
                         <span :class="[scope.row.data.TODAY[0].isBig ? 'red' : '']">
-                            <dict-tag :options="dictData.sys_oper_type" :value="scope.row.data.TODAY[0].key" />
+                            <dict-tag :options="dictData.sys_oper_type" :value="showType2" />
                             {{ scope.row.data.TODAY[0].value }}次 {{ scope.row.data.TODAY[0].isBig ? '(超过阈值)' : '' }}
                         </span> &nbsp;| &nbsp;
                         <span :class="[scope.row.data.TODAY[1].isBig ? 'red' : '']">
-                            <dict-tag :options="dictData.sys_oper_type" :value="scope.row.data.TODAY[1].key" />
+                            <dict-tag :options="dictData.sys_oper_type" :value="showType10" />
                             {{ scope.row.data.TODAY[1].value }}次{{ scope.row.data.TODAY[0].isBig ? '(超过阈值)' : '' }}
                         </span>
+                    </div>
+                    <div v-else-if="scope.row.data==undefined || Object.keys(scope.row.data).length === 0" class="tag-dict">
+                        <span><dict-tag :options="dictData.sys_oper_type" :value="showType2" />0次</span> 
+                        &nbsp;| &nbsp;
+                        <span><dict-tag :options="dictData.sys_oper_type" :value="showType10" />0次</span> 
                     </div>
                 </template>
             </el-table-column>
             <el-table-column label="本周操作次数" :show-overflow-tooltip="true" prop="MONTH"
                 :align="publicConfigStore.tableAlign" min-width='150px'>
                 <template #default="scope">
-                    <div class="tag-dict">
+                    <div v-if="scope.row.data!=undefined && Object.keys(scope.row.data).length != 0"  class="tag-dict">
                         <span :class="[scope.row.data.WEEK[0].isBig ? 'red' : '']">
-                            <dict-tag :options="dictData.sys_oper_type" :value="scope.row.data.WEEK[0].key" />
+                            <dict-tag :options="dictData.sys_oper_type" :value="showType2" />
                             {{ scope.row.data.WEEK[0].value }}次{{ scope.row.data.WEEK[0].isBig ? '(超过阈值)' : '' }}
                         </span> &nbsp;| &nbsp;
                         <span :class="[scope.row.data.WEEK[1].isBig ? 'red' : '']">
-                            <dict-tag :options="dictData.sys_oper_type" :value="scope.row.data.WEEK[1].key" />
+                            <dict-tag :options="dictData.sys_oper_type" :value="showType10" />
                             {{ scope.row.data.WEEK[1].value }}次{{ scope.row.data.WEEK[0].isBig ? '(超过阈值)' : '' }}
                         </span>
+                    </div>
+                    <div v-else-if="scope.row.data==undefined || Object.keys(scope.row.data).length === 0" class="tag-dict">
+                        <span><dict-tag :options="dictData.sys_oper_type" :value="showType2" />0次</span> 
+                        &nbsp;| &nbsp;
+                        <span><dict-tag :options="dictData.sys_oper_type" :value="showType10" />0次</span> 
                     </div>
                 </template>
             </el-table-column>
             <el-table-column label="本月操作次数" :show-overflow-tooltip="true" prop="MONTH"
                 :align="publicConfigStore.tableAlign" min-width='150px'>
                 <template #default="scope">
-                    <div class="tag-dict">
+                    <div  v-if="scope.row.data!=undefined && Object.keys(scope.row.data).length != 0"  class="tag-dict">
                         <span :class="[scope.row.data.MONTH[0].isBig ? 'red' : '']">
-                            <dict-tag :options="dictData.sys_oper_type" :value="scope.row.data.MONTH[0].key" />
+                            <dict-tag :options="dictData.sys_oper_type" :value="showType2" />
                             {{ scope.row.data.MONTH[0].value }}次{{ scope.row.data.MONTH[0].isBig ? '(超过阈值)' : '' }}
                         </span> &nbsp;| &nbsp;
                         <span :class="[scope.row.data.MONTH[1].isBig ? 'red' : '']">
-                            <dict-tag :options="dictData.sys_oper_type" :value="scope.row.data.MONTH[1].key" />
+                            <dict-tag :options="dictData.sys_oper_type" :value="showType10" />
                             {{ scope.row.data.MONTH[1].value }}次{{ scope.row.data.MONTH[0].isBig ? '(超过阈值)' : '' }}
                         </span>
+                    </div>
+                    <div v-else-if="scope.row.data==undefined || Object.keys(scope.row.data).length === 0" class="tag-dict">
+                        <span><dict-tag :options="dictData.sys_oper_type" :value="showType2" />0次</span> 
+                        &nbsp;| &nbsp;
+                        <span><dict-tag :options="dictData.sys_oper_type" :value="showType10" />0次</span> 
                     </div>
                 </template>
             </el-table-column>
@@ -75,14 +90,14 @@
             </el-table-column>
 
 
-            <el-table-column label="操作" :align="publicConfigStore.tableAlign" class-name="small-padding fixed-width"
+            <!-- <el-table-column label="操作" :align="publicConfigStore.tableAlign" class-name="small-padding fixed-width"
                 fixed="right" width="100px">
                 <template #default="scope">
                     <div class="table-caozuo">
                         <span @click="handleMeg(scope.row, 1)">详情</span>
                     </div>
                 </template>
-            </el-table-column>
+            </el-table-column> -->
         </el-table>
         <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNo"
             v-model:limit="queryParams.pageSize" @pagination="getList" />
@@ -92,9 +107,9 @@
 import { publicConfigStore } from "@/store/modules/publicConfig";
 const { proxy } = getCurrentInstance();
 const router = useRouter();
-import { riskQuery, riskTable } from "../data/index";
+import { riskOutQuery, riskOutTable } from "../data/index";
 import { ref } from "vue";
-import { getLimitWarnList } from "@/api/system/log";
+import { getWarnListOut } from "@/api/system/log";
 const { sys_authentication, warn_level, user_type, sys_oper_type } = proxy.useDict("sys_authentication", "warn_level", "user_type", "sys_oper_type");
 //页面中用到的字典数据
 const dictData = ref({
@@ -103,6 +118,10 @@ const dictData = ref({
     user_type: user_type,
     sys_oper_type: sys_oper_type
 });
+
+//显示操作类型
+const showType2=ref(2);
+const showType10=ref(10);
 //查询表单
 const queryParams = ref({
     pageNum: 1,
@@ -115,17 +134,18 @@ const total = ref(0);
 
 //查询 列表数据
 const getList = () => {
-    getLimitWarnList(queryParams.value).then((res) => {
+    queryParams.value.type=0;//1外部系统 0用户
+    getWarnListOut(queryParams.value).then((res) => {
         tableData.value = res.rows;
         total.value = res.total;
     });
 };
 //点击 查询 按钮
 const handleQuery = (params) => {
-    queryParams.value.userName = params.userName
-    queryParams.value.userType = params.userType
-    queryParams.value.pageNum = 1
-    queryParams.value.pageSize = 10
+    queryParams.value.userName = params.userName;
+    queryParams.value.userType = params.userType;
+    queryParams.value.pageNum = 1;
+    queryParams.value.pageSize = 10;
     getList()
 };
 //点击 重置 按钮
@@ -155,6 +175,7 @@ const handleMeg = (row, type) => {
 //点击 导出
 const handleExport = (boo) => {
     let obj = JSON.parse(JSON.stringify(queryParams.value))
+
     //proxy.download("zuser/export", obj, `warn_${new Date().getTime()}.xlsx`);
 };
 //选中

@@ -40,10 +40,10 @@
         <el-card :shadow="publicConfigStore.cardShadow">
             <div class="">
                 <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-                    <el-tab-pane label="外部系统" name="name1">
+                    <el-tab-pane label="内部系统" name="name1">
                         <risk-out ref="riskOutRef"></risk-out>
                     </el-tab-pane>
-                    <el-tab-pane label="内部系统" name="name2">
+                    <el-tab-pane label="外部系统" name="name2">
                         <risk-inside ref="riskInsideRef"></risk-inside>
                     </el-tab-pane>
                     <el-tab-pane label="操作用户" name="name3">

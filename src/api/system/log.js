@@ -106,6 +106,23 @@ export function getWarnDetailList(query) {
 	})
 }
 
+//风险预警详情表头统计
+export function getWarnDetailCount(query) {
+	return request({
+		url: '/limit/warnDetailCount',
+		method: 'get',
+		params: query
+	})
+}
+
+//风险预警--外部系统用户阈值列表 0用户  1是外部系统
+export function getWarnListOut(query) {
+	return request({
+		url: '/limit/warnListOut',
+		method: 'get',
+		params: query
+	})
+}
 
 
 

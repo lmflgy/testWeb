@@ -109,7 +109,7 @@ const {
     proxy
 } = getCurrentInstance();
 
-import { getWarnDetailList } from "@/api/system/log";
+import { getWarnDetailList,getWarnDetailCount } from "@/api/system/log";
 import {
     useRoute
 } from 'vue-router'
@@ -162,7 +162,27 @@ const getList = () => {
     getWarnDetailList(queryParams.value).then((res) => {
         tableData.value = res.rows
         total.value = res.total
-        selectTotal.value="查询操作次数（共）";
+      
+    })
+    getWarnDetailCount(queryParams.value).then((res) => {
+        if(res===undefined) return;
+        res=res.data;
+        for (let i = 0; i < res.length; i++) {
+            console.log(res[i].businessType==2)
+            if (res[i].businessType == 2) {
+                updateTotal.value="修改操作次数（共"+res[i].count+"次）";
+            }
+            else if (res[i].businessType == 3) {
+
+                deleteTotal.value="删除操作次数（共"+res[i].count+"次）";
+            }
+            else if (res[i].businessType == 5) {
+                exportTotal.value="导出操作次数（共"+res[i].count+"次）";
+            }
+            else if (res[i].businessType == 10) {
+                selectTotal.value="查询操作次数（共"+res[i].count+"次）";
+            }
+        }
     })
 }
 //点击 查询 按钮
