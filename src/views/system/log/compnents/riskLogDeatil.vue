@@ -35,7 +35,7 @@
                 <el-table-column type="index" label="序号" :width="publicConfigStore.tableIndexWidth" />
                 <el-table-column label="操作员" :show-overflow-tooltip="true" prop="userName"
                     :align="publicConfigStore.tableAlign"></el-table-column>
-                <el-table-column label="记录时间" :show-overflow-tooltip="true" prop="countTime"
+                <el-table-column label="记录时间" :show-overflow-tooltip="true" prop="day"
                     :align="publicConfigStore.tableAlign"></el-table-column>
 
 
@@ -86,7 +86,7 @@
 
 
             </el-table>
-            <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNo"
+            <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum"
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
         <!-- 导出 -->
@@ -265,7 +265,7 @@ const exportSubmit = async (pwd) => {
     obj.startTime = exportDate.value[0]
     obj.endTime = exportDate.value[1]
 
-    proxy.download("monitor/operlog/export", obj, `config_${new Date().getTime()}.xlsx`);
+    proxy.download("limit/export", obj, `config_${new Date().getTime()}.xlsx`);
 }
 //选中
 const handleSelectionChange = () => {

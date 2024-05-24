@@ -63,7 +63,7 @@
                             </el-form-item>
                         </el-col> -->
 						<el-col :span="8" class="row">
-							<el-form-item label="黑名单描述：" prop="remark">
+							<el-form-item label="补充说明" prop="remark">
 								<el-input type="textarea" v-model="form.remark" clearable
 									:disabled="type == 3 ?true : false" />
 							</el-form-item>

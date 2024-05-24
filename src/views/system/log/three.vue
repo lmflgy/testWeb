@@ -68,8 +68,12 @@
 
               
             </el-table>
-            <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNo"
-                v-model:limit="queryParams.pageSize" @pagination="getList" />
+            <pagination                
+                v-show="total > 0"
+               :total="total"
+               v-model:page="queryParams.pageNum"
+               v-model:limit="queryParams.pageSize"
+               @pagination="getList"/>
         </el-card>
         <!-- 导出 -->
         <exportDialog :dialogVisible="exportDialogVisible" @close="handleExport"></exportDialog>
@@ -91,12 +95,13 @@ import { ref } from 'vue';
 import exportDialog from '@/components/exportDialog';
 import { getRpcLogDataList } from "@/api/system/log";
 
-const { sys_oper_type,user_type,sys_oper_type_three } = proxy.useDict("sys_oper_type","user_type","sys_oper_type_three");
+const { sys_oper_type,user_type,sys_oper_type_three,rpc_uset_type } = proxy.useDict("rpc_uset_type","sys_oper_type","user_type","sys_oper_type_three");
 //页面中用到的字典数据
 const dictData = ref({
     sys_oper_type:sys_oper_type,
     user_type: user_type,
-    sys_oper_type_three:sys_oper_type_three
+    sys_oper_type_three:sys_oper_type_three,
+    rpc_uset_type:rpc_uset_type
 })
 //查询表单
 const queryParams = ref({

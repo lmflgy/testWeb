@@ -75,12 +75,11 @@
                         <div class="table-caozuo">
                             <span @click="handleMeg(scope.row,3)">详情</span>
                             <span @click="handleMeg(scope.row,2)">修改</span>
-                            <span @click="handleDel(scope.row)">移除黑名单</span>
                         </div>
                     </template>
                 </el-table-column>
             </el-table>
-            <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNo"
+            <pagination v-show="total > 0" :total="total" v-model:page="queryParams.pageNum"
                 v-model:limit="queryParams.pageSize" @pagination="getList" />
         </el-card>
        <!-- 上级审核人 -->
@@ -105,11 +104,11 @@ import {
 } from './data/index.js'
 import { ref } from 'vue';
 
-const { cert_type,sys_authentication } = proxy.useDict("cert_type","sys_authentication");
+const { cert_type,sys_user_sex } = proxy.useDict("cert_type","sys_user_sex");
 //页面中用到的字典数据
 const dictData = ref({
     cert_type: cert_type,
-	sys_authentication:sys_authentication
+    sys_user_sex:sys_user_sex
 })
 //查询表单
 const queryParams = ref({

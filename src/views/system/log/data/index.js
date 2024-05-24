@@ -152,14 +152,28 @@ export const disabledPeopleQuery = [
 	  name: "时间段查询：",
 	  placeholder: "请输入",
 	},
-	
+	{
+		prop: "type",
+		type: "select",
+		name: "用户类型：",
+		dict:"rpc_uset_type",
+		placeholder: "选择",
+	  },
+
   ];
   //三方调用日志 表格显示
   export const threeTable = [
 	{
-		prop: "businessType",
+		prop: "userId",
 		type: "input",
+		name: "被操作用户ID",
+		width: "80px",
+	  },
+	{
+		prop: "businessType",
+		type: "select",
 		name: "操作类型",
+		dict: "sys_oper_type",
 		placeholder: "请输入",
 		width: "180px",
 	  },
@@ -173,7 +187,7 @@ export const disabledPeopleQuery = [
 	{
 	  prop: "operName",
 	  type: "input",
-	  name: "操作员",
+	  name: "操作人",
 	  placeholder: "请输入",
 	  width: "180px",
 	},
@@ -192,18 +206,21 @@ export const disabledPeopleQuery = [
 		placeholder: "请选择",
 		width: "120px",
 	  },
+	  {
+		prop: "type",
+		type: "select",
+		name: "用户类型",
+		dict: "rpc_uset_type",
+		placeholder: "请选择",
+		width: "80px",
+	  },
 	{
 	  prop: "tellerld",
 	  type: "input",
 	  name: "外部系统ID",
 	  width: "180px",
 	},
-	{
-		prop: "userId",
-		type: "input",
-		name: "操作用户ID",
-		width: "120px",
-	  },
+	
   ];
   //风险预警日志 表单查询
   export const riskQuery = [
