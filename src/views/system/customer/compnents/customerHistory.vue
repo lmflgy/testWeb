@@ -19,7 +19,7 @@
         </el-steps>
     </div>
 </template>
-<script  name="CustomerHistory">
+<script setup  name="CustomerHistory">
 import {
     publicConfigStore
 } from '@/store/modules/publicConfig'
@@ -33,16 +33,16 @@ import { getZUserAuditLogInfo} from "@/api/system/customer";
 const form = ref({})
 //页面初始化
 const pageInit=(user_id)=>{
-   
+    getZUserAuditLogInfo({userId:props.myProp,status:0}).then((res)=>{});
 }
-export default {
-  props: {
+const props = defineProps({
     myProp: {
         type: Object,
         required: true
     }
-  }
-};
+});
+
+pageInit();
 </script>
 <style lang="scss" scoped>
 :deep(.el-step .is-vertical .el-step__line) {
