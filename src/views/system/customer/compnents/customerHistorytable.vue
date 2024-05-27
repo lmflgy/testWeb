@@ -19,7 +19,7 @@
         </el-steps>
     </div>
 </template>
-<script  name="CustomerHistory">
+<script  name="CustomerHistoryTable">
 import {
     publicConfigStore
 } from '@/store/modules/publicConfig'

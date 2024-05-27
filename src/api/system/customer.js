@@ -87,3 +87,12 @@ export function getZUserInfo(query) {
     method: 'get'
   })
 }
+
+//获取用户审核日志
+export function getZUserAuditLogInfo(query) {
+  return request({
+    url: '/auLog/list',
+    method: 'get',
+    params: query
+  })
+}

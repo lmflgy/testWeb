@@ -66,7 +66,7 @@
                         </el-col> -->
                     </el-row>
                   
-                    <el-row class="row-mar" v-if="form.appStatus===true">
+                    <el-row class="row-mar" v-if="form.appStatus==='1' && form.yutong!=undefined && form.yutong!=NaN">
                         <el-col :span="24" class="">
                             <div class="card-title">渝通行基础信息</div>
                         </el-col>
@@ -100,7 +100,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row class="row-mar" v-if="form.consStatus===true">
+                    <el-row class="row-mar" v-if="form.consStatus==='1' && form.zhujian!=undefined && form.zhujian!=NaN">
                         <el-col :span="24" class="">
                             <div class="card-title">住建部基础信息</div>
                         </el-col>
@@ -134,7 +134,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row class="row-mar" v-if="form.transportStatus===true">
+                    <el-row class="row-mar" v-if="form.transportStatus==='1' && form.jiaotong!=undefined && form.jiaotong!=NaN">
                         <el-col :span="24" class="">
                             <div class="card-title">交通部基础信息</div>
                         </el-col>
@@ -168,7 +168,7 @@
                         </el-col>
                     </el-row>
 
-                    <el-row class="row-mar" v-if="form.ymtStatus===true">
+                    <el-row class="row-mar" v-if="form.ymtStatus==='1' && form.yima!=undefined && form.yima!=NaN">
                         <el-col :span="24" class="">
                             <div class="card-title">一码通基础信息</div>
                         </el-col>
@@ -212,12 +212,14 @@
         <el-card v-if="type == 1" :shadow="publicConfigStore.cardShadow" class="search-card">
             <div class="">
                 <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-                <el-tab-pane label="审批历史" name="name1">
-                    <customer-history></customer-history>
-                </el-tab-pane>
-                <el-tab-pane label="操作日志" name="name2">Config</el-tab-pane>
-                <el-tab-pane label="历史操作日志" name="name3">Role</el-tab-pane>
-            </el-tabs>
+                    <el-tab-pane label="审批历史" name="name1">
+                        <customer-history :my-prop="parentData" ref="customerHistoryRef"></customer-history>
+                    </el-tab-pane>
+                    <!-- <el-tab-pane label="操作日志" name="name2">Config</el-tab-pane> -->
+                    <el-tab-pane label="历史操作日志" name="name3">
+                        <customer-history-table :my-prop="parenttableData" ref="customerHistoryTableRef"></customer-history-table>
+                    </el-tab-pane>
+                </el-tabs>
             </div>
         </el-card>
 
@@ -231,50 +233,52 @@
 <script setup name="CustomerEdit">
 import {
     publicConfigStore
-} from '@/store/modules/publicConfig'
+} from '@/store/modules/publicConfig';
 const {
     proxy
 } = getCurrentInstance();
-import useTagsViewStore from '@/store/modules/tagsView'
-	const visitedViews = computed(() => useTagsViewStore().visitedViews);
+import useTagsViewStore from '@/store/modules/tagsView';
+const visitedViews = computed(() => useTagsViewStore().visitedViews);
 import { useRoute } from 'vue-router'
 import customerHistory from '../compnents/customerHistory.vue';
 const route = useRoute();
-import CustomerHistory from '../compnents/customerHistory.vue'
-import { getZUserInfo} from "@/api/system/customer";
+import CustomerHistory from '../compnents/customerHistory.vue';
+import CustomerHistoryTable from '../compnents/customerHistorytable.vue';
+import { getZUserInfo,getZUserAuditLogInfo} from "@/api/system/customer";
 const {  sys_user_sex } = proxy.useDict("sys_user_sex");
 //自定义的字段
-const active = ref(1)
-const form = ref({})
-const imgUrl = ref('https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg')
+const active = ref(1);
+const form = ref({});
+const imgUrl = ref('https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg');
 //1详情 2修改
-const type = ref(1)
-const activeName = ref('name1')
+const type = ref(1);
+const activeName = ref('name1');
+const parentData=ref({});
+const parenttableData=ref({});
 
-
-//上级审核弹框
-const superiorDialogVisible = ref(false)
+//上级审核弹框;
+const superiorDialogVisible = ref(false);
 //输入密码弹框
-const managerPwdDialogVisible = ref(false)
+const managerPwdDialogVisible = ref(false);
 
 //选择上级完成
 const handleSuperior = (boo, userId) => {
     if (userId) {
-        superiorName.value = userId
-        managerPwdDialogVisible.value = true
+        superiorName.value = userId;
+        managerPwdDialogVisible.value = true;
     }
-    superiorDialogVisible.value = false
+    superiorDialogVisible.value = false;
 }
 //关闭弹框
 const cancelDialog = (type)=>{
-	if(type == 2) superiorDialogVisible.value = false
-	else managerPwdDialogVisible.value = false
+	if(type == 2) superiorDialogVisible.value = false;
+	else managerPwdDialogVisible.value = false;
 }
 //密码输入完成
 const handleManagerPwd = (boo, pwd) => {
     if (pwd) {
-        superiorDialogVisible.value = false
-        submitForm(pwd)
+        superiorDialogVisible.value = false;
+        submitForm(pwd);
     }
 }
 
@@ -282,7 +286,7 @@ const handleManagerPwd = (boo, pwd) => {
 const handelSubmitForm =()=>{
      proxy.$refs["dialogRef"].validate(valid => {
         if(valid){
-            superiorDialogVisible.value = boo
+            superiorDialogVisible.value = boo;
         }
     })
 }
@@ -299,11 +303,11 @@ const submitForm =()=>{
 const  closeForm =()=>{
     const view = {path:'/customer/customerEdit',name: "CustomerEdit"}
     useTagsViewStore().delView(view);
-    const latestView = visitedViews.slice(-1)[0]
+    const latestView = visitedViews.slice(-1)[0];
     if (latestView) {
-        router.push(latestView.fullPath)
+        router.push(latestView.fullPath);
     } else {
-        router.push('/')
+        router.push('/');
     }
 }
 
@@ -312,8 +316,12 @@ const pageInit=()=>{
     if (route.query && route.query.type) {
         type.value = route.query.type;
     }
-    getZUserInfo(route.query.id).then((res)=>{
-        form=res.data
+    let user_id=route.query.id;
+    getZUserInfo(user_id).then((res)=>{
+        form.value=res.data;
+    })
+    getZUserAuditLogInfo({userId:user_id,status:0}).then((res)=>{
+        parentData.value=res.rows;
     })
 }
 pageInit();
