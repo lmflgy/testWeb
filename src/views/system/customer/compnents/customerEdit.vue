@@ -282,7 +282,7 @@ const handelSubmitForm =()=>{
 const submitForm =()=>{
     proxy.$refs["dialogRef"].validate(valid => {
         if(valid){
-            
+            updateZUserInfo(form.value).then((res)=>{}).catch((err)=>{});
         }
     })
 }

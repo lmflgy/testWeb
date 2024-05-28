@@ -99,5 +99,9 @@ export function getZUserAuditLogInfo(query) {
 
 //修改用户信息
 export function updateZUserInfo(data) {
-  
+  return request({
+    url: '/zuser/update',
+    method: 'post',
+    data: data
+  })
 }
