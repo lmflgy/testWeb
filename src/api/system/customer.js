@@ -96,3 +96,8 @@ export function getZUserAuditLogInfo(query) {
     params: query
   })
 }
+
+//修改用户信息
+export function updateZUserInfo(data) {
+  
+}

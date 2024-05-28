@@ -1,19 +1,7 @@
 <template>
     
 <div class="app-container customer-edit-con">
-        <!-- 查询条件 -->
-        <!-- <el-card :shadow="publicConfigStore.cardShadow" class="search-card">
-            <div class="card-title">客户个人信息修改流程</div>
-            <div class="step">
-                <el-steps style="" :active="active" align-center>
-                    <el-step title="修改信息"></el-step>
-                    <el-step title="进行审核" />
-                    <el-step title="审核完成" />
-                </el-steps>
-            </div>
-        </el-card> -->
-
-        <el-card :shadow="publicConfigStore.cardShadow" class="search-card">
+        <el-card :shadow="publicConfigStore.cardShadow" class="" >
             <div class="form-content">
                 <div class="card-title">客户基础信息</div>
                 <el-form ref="dialogRef" :model="form" :label-width="publicConfigStore.formLabel120" >
@@ -72,30 +60,30 @@
                         </el-col>
                         <el-col :span="8" class="row">
                             <el-form-item label="客户姓名：" prop="yutong_name" :rules="[{ required: true, message: '请输入客户姓名' }]">
-                                <el-input v-model="form.yutong.name" clearable  :disabled="type==1?true:false"/>
+                                <el-input v-model="form.yutong.name" clearable  :disabled="true"/>
                                 <span>不可修改</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12" class="row">
                             <el-form-item label="客户电话：" prop="yutong_phoneNo" :rules="[{ required: true, message: '请输入客户电话' }]">
-                                <el-input v-model="form.yutong.phoneNo" clearable :disabled="type==1?true:false"/>
+                                <el-input v-model="form.yutong.phoneNo" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
                             <el-form-item label="证件号码：" prop="yutong_certNo" :rules="[{ required: true, message: '请输入证件号' }]">
-                                <el-input v-model="form.yutong.certNo" clearable :disabled="type==1?true:false"/>
+                                <el-input v-model="form.yutong.certNo" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
                             <el-form-item label="性别：" prop="yutong_sex" :rules="[{ required: true, message: '请选择性别' }]">
-                                <el-select v-model="form.yutong.sex" placeholder="请选择" :disabled="type==1?true:false">
+                                <el-select v-model="form.yutong.sex" placeholder="请选择" :disabled="true">
                                     <el-option v-for="dict in sys_user_sex"  :key="dict.value"  :label="dict.label" :value="dict.value"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
                             <el-form-item label="年龄：" prop="yutong_age" :rules="[{ required: true, message: '请输入年龄' }]">
-                                <el-input v-model="form.yutong.age" clearable :disabled="type==1?true:false"/>
+                                <el-input v-model="form.yutong.age" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -105,31 +93,31 @@
                             <div class="card-title">住建部基础信息</div>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="客户姓名：" prop="zhujian_name" :rules="[{ required: true, message: '请输入客户姓名' }]">
-                                <el-input v-model="form.zhujian.name" clearable  :disabled="type==1?true:false"/>
+                            <el-form-item label="客户姓名：" prop="zhujian_name" >
+                                <el-input v-model="form.zhujian.name" clearable  :disabled="true"/>
                                 <span>不可修改</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12" class="row">
-                            <el-form-item label="客户电话：" prop="zhujian_phoneNo" :rules="[{ required: true, message: '请输入客户电话' }]">
-                                <el-input v-model="form.zhujian.phoneNo" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="客户电话：" prop="zhujian_phoneNo" >
+                                <el-input v-model="form.zhujian.phoneNo" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="证件号码：" prop="zhujian_certNo" :rules="[{ required: true, message: '请输入证件号' }]">
-                                <el-input v-model="form.zhujian.certNo" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="证件号码：" prop="zhujian_certNo" >
+                                <el-input v-model="form.zhujian.certNo" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="性别：" prop="zhujian_sex" :rules="[{ required: true, message: '请选择性别' }]">
-                                <el-select v-model="form.zhujian.sex" placeholder="请选择" :disabled="type==1?true:false">
+                            <el-form-item label="性别：" prop="zhujian_sex" >
+                                <el-select v-model="form.zhujian.sex" placeholder="请选择" :disabled="true">
                                     <el-option v-for="dict in sys_user_sex"  :key="dict.value"  :label="dict.label" :value="dict.value"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="年龄：" prop="zhujian_age" :rules="[{ required: true, message: '请输入年龄' }]">
-                                <el-input v-model="form.zhujian.age" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="年龄：" prop="zhujian_age" >
+                                <el-input v-model="form.zhujian.age" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -139,31 +127,31 @@
                             <div class="card-title">交通部基础信息</div>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="客户姓名：" prop="jiaotong_name" :rules="[{ required: true, message: '请输入客户姓名' }]">
-                                <el-input v-model="form.jiaotong.name" clearable  :disabled="type==1?true:false"/>
+                            <el-form-item label="客户姓名：" prop="jiaotong_name" >
+                                <el-input v-model="form.jiaotong.name" clearable  :disabled="true"/>
                                 <span>不可修改</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12" class="row">
-                            <el-form-item label="客户电话：" prop="jiaotong_phoneNo" :rules="[{ required: true, message: '请输入客户电话' }]">
-                                <el-input v-model="form.jiaotong.phoneNo" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="客户电话：" prop="jiaotong_phoneNo" >
+                                <el-input v-model="form.jiaotong.phoneNo" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="证件号码：" prop="jiaotong_certNo" :rules="[{ required: true, message: '请输入证件号' }]">
-                                <el-input v-model="form.jiaotong.certNo" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="证件号码：" prop="jiaotong_certNo" >
+                                <el-input v-model="form.jiaotong.certNo" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="性别：" prop="jiaotong_sex" :rules="[{ required: true, message: '请选择性别' }]">
-                                <el-select v-model="form.jiaotong.sex" placeholder="请选择" :disabled="type==1?true:false">
+                            <el-form-item label="性别：" prop="jiaotong_sex" >
+                                <el-select v-model="form.jiaotong.sex" placeholder="请选择" :disabled="true">
                                     <el-option v-for="dict in sys_user_sex"  :key="dict.value"  :label="dict.label" :value="dict.value"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="年龄：" prop="jiaotong_age" :rules="[{ required: true, message: '请输入年龄' }]">
-                                <el-input v-model="form.jiaotong.age" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="年龄：" prop="jiaotong_age" >
+                                <el-input v-model="form.jiaotong.age" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
@@ -173,38 +161,38 @@
                             <div class="card-title">一码通基础信息</div>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="客户姓名：" prop="yima_name" :rules="[{ required: true, message: '请输入客户姓名' }]">
-                                <el-input v-model="form.yima.name" clearable  :disabled="type==1?true:false"/>
+                            <el-form-item label="客户姓名：" prop="yima_name" >
+                                <el-input v-model="form.yima.name" clearable  :disabled="true"/>
                                 <span>不可修改</span>
                             </el-form-item>
                         </el-col>
                         <el-col :span="12" class="row">
-                            <el-form-item label="客户电话：" prop="yima_phoneNo" :rules="[{ required: true, message: '请输入客户电话' }]">
-                                <el-input v-model="form.yima.phoneNo" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="客户电话：" prop="yima_phoneNo" >
+                                <el-input v-model="form.yima.phoneNo" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="证件号码：" prop="yima_certNo" :rules="[{ required: true, message: '请输入证件号' }]">
-                                <el-input v-model="form.yima.certNo" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="证件号码：" prop="yima_certNo" >
+                                <el-input v-model="form.yima.certNo" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="性别：" prop="yima_sex" :rules="[{ required: true, message: '请选择性别' }]">
-                                <el-select v-model="form.yima.sex" placeholder="请选择" :disabled="type==1?true:false">
+                            <el-form-item label="性别：" prop="yima_sex" >
+                                <el-select v-model="form.yima.sex" placeholder="请选择" :disabled="true">
                                     <el-option v-for="dict in sys_user_sex"  :key="dict.value"  :label="dict.label" :value="dict.value"></el-option>
                                 </el-select>
                             </el-form-item>
                         </el-col>
                         <el-col :span="8" class="row">
-                            <el-form-item label="年龄：" prop="yima_age" :rules="[{ required: true, message: '请输入年龄' }]">
-                                <el-input v-model="form.yima.age" clearable :disabled="type==1?true:false"/>
+                            <el-form-item label="年龄：" prop="yima_age" >
+                                <el-input v-model="form.yima.age" clearable :disabled="true"/>
                             </el-form-item>
                         </el-col>
                     </el-row>
                 </el-form>
                 <div class="btns">
                     <el-button  @click="closeForm">取消</el-button>
-                    <el-button type="primary" @click="handelSubmitForm">保存</el-button>
+                    <el-button v-if="type==2" type="primary" @click="handelSubmitForm">保存</el-button>
                 </div>
             </div>
         </el-card>
@@ -212,9 +200,9 @@
         <el-card v-if="type == 1" :shadow="publicConfigStore.cardShadow" class="search-card">
             <div class="">
                 <el-tabs v-model="activeName" class="demo-tabs" @tab-click="handleClick">
-                    <el-tab-pane label="审批历史" name="name1">
+                    <!-- <el-tab-pane label="审批历史" name="name1">
                         <customer-history :my-prop="parentData" ref="customerHistoryRef"></customer-history>
-                    </el-tab-pane>
+                    </el-tab-pane> -->
                     <!-- <el-tab-pane label="操作日志" name="name2">Config</el-tab-pane> -->
                     <el-tab-pane label="历史操作日志" name="name3">
                         <customer-history-table :my-prop="parenttableData" ref="customerHistoryTableRef"></customer-history-table>
@@ -244,7 +232,7 @@ import customerHistory from '../compnents/customerHistory.vue';
 const route = useRoute();
 import CustomerHistory from '../compnents/customerHistory.vue';
 import CustomerHistoryTable from '../compnents/customerHistorytable.vue';
-import { getZUserInfo,getZUserAuditLogInfo} from "@/api/system/customer";
+import { getZUserInfo,getZUserAuditLogInfo,updateZUserInfo} from "@/api/system/customer";
 const {  sys_user_sex } = proxy.useDict("sys_user_sex");
 //自定义的字段
 const active = ref(1);
@@ -252,9 +240,9 @@ const form = ref({});
 const imgUrl = ref('https://cube.elemecdn.com/6/94/4d3ea53c084bad6931a56d5158a48jpeg.jpeg');
 //1详情 2修改
 const type = ref(1);
-const activeName = ref('name1');
+const activeName = ref('name3');
 const parentData=ref({});
-const parenttableData=ref({});
+const parenttableData=ref('');
 
 //上级审核弹框;
 const superiorDialogVisible = ref(false);
@@ -294,7 +282,7 @@ const handelSubmitForm =()=>{
 const submitForm =()=>{
     proxy.$refs["dialogRef"].validate(valid => {
         if(valid){
-
+            
         }
     })
 }
@@ -317,6 +305,7 @@ const pageInit=()=>{
         type.value = route.query.type;
     }
     let user_id=route.query.id;
+    parenttableData.value=user_id;
     getZUserInfo(user_id).then((res)=>{
         form.value=res.data;
     })
